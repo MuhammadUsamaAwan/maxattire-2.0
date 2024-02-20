@@ -7,8 +7,8 @@ import { formatPrice } from '~/lib/utils';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 
-import { OrderItems } from '../../_components/order-items';
-import { OrderStatusBadge } from '../../_components/order-status-badge';
+import { OrderItems } from '../_components/order-items';
+import { OrderStatusBadge } from '../_components/order-status-badge';
 
 type OrderDetailPageProps = {
   params: {

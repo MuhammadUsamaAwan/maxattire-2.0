@@ -15,7 +15,7 @@ import { Separator } from '~/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
 import { Icons } from '~/components/icons';
 
-import { OrderStatusBadge } from '../_components/order-status-badge';
+import { OrderStatusBadge } from './_components/order-status-badge';
 
 export default async function OrdersPage() {
   const user = await getUser();

@@ -7,7 +7,7 @@ import { getOrderProductReview } from '~/lib/fetchers/review';
 import { Separator } from '~/components/ui/separator';
 import { ProductReview } from '~/components/product-review';
 
-import { AddReviewForm } from '../../../../_components/add-review-form';
+import { AddReviewForm } from '../../../_components/add-review-form';
 
 type ReviewProductPageProps = {
   params: {

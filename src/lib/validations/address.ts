@@ -1,9 +1,17 @@
 import { z } from 'zod';
 
 export const addAddressSchema = z.object({
-  phone: z.string().min(1),
-  address: z.string().min(1),
-  state: z.string().min(1),
-  city: z.string().min(1),
-  postalCode: z.string().min(1),
+  phone: z.string().min(1, {
+    message: 'Phone is required',
+  }),
+  address: z.string().min(1, {
+    message: 'Address is required',
+  }),
+  state: z.string().min(1, {
+    message: 'State is required',
+  }),
+  city: z.string().min(1, {
+    message: 'City is required',
+  }),
+  postalCode: z.string(),
 });
