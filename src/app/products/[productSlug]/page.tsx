@@ -1,13 +1,15 @@
+import { type Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import { notFound } from 'next/navigation';
 
+import { env } from '~/env';
 import { getUser } from '~/lib/auth';
 import { getProductColors } from '~/lib/fetchers/color';
-import { getProduct } from '~/lib/fetchers/product';
+import { getProduct, getProductSeo } from '~/lib/fetchers/product';
 import { getProductStocks } from '~/lib/fetchers/product-stock';
 import { getProductStockImages } from '~/lib/fetchers/product-stock-image';
 import { getProductReviews } from '~/lib/fetchers/review';
-import { formatPrice, getAvgRating } from '~/lib/utils';
+import { absoluteUrl, formatPrice, getAvgRating } from '~/lib/utils';
 import { Separator } from '~/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { Rating } from '~/components/rating';
@@ -52,6 +54,41 @@ type ProductPageProps = {
     color: string | undefined;
   };
 };
+
+export async function generateMetadata({ params: { productSlug } }: ProductPageProps): Promise<Metadata> {
+  const product = await getProductSeo(productSlug);
+
+  if (!product) {
+    return {};
+  }
+
+  return {
+    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+    title: product.metaTitle,
+    description: product.metaDescription,
+    keywords: product.metaTag,
+    openGraph: {
+      title: product.metaTitle ?? '',
+      description: product.metaDescription ?? '',
+      type: 'article',
+      url: absoluteUrl(productSlug),
+      images: [
+        {
+          url: product.metaImg ?? '',
+          width: 1200,
+          height: 630,
+          alt: product.metaTitle ?? '',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.metaTitle ?? '',
+      description: product.metaDescription ?? '',
+      images: product.metaImg ? [product.metaImg] : [],
+    },
+  };
+}
 
 export default async function ProductPage({ params: { productSlug }, searchParams: { color } }: ProductPageProps) {
   const [session, product, colors, reviews] = await getCachedData(productSlug);

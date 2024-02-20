@@ -6,6 +6,7 @@ import { formatPrice } from '~/lib/utils';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 import { OrderItems } from '~/components/order-items';
+import { PageHeader } from '~/components/page-header';
 
 import { PaymentForm } from '../_components/payment-form';
 
@@ -34,12 +35,7 @@ export default async function PaymentPage({ params: { orderCode } }: PaymentPage
 
   return (
     <div className='container pb-8 pt-6 md:py-8'>
-      <div className='mb-8 space-y-1'>
-        <h1 className='text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]'>Payment</h1>
-        <p className='max-w-[750px] text-base text-muted-foreground sm:text-lg'>
-          Enter your credit card details for payment
-        </p>
-      </div>
+      <PageHeader title='Payment' description='Enter your credit card details for payment' />
       <div className='grid gap-8 sm:grid-cols-2'>
         <div>
           <Card>
@@ -63,7 +59,7 @@ export default async function PaymentPage({ params: { orderCode } }: PaymentPage
             </CardFooter>
           </Card>
         </div>
-        <PaymentForm orderCode={orderCode} />
+        <PaymentForm orderCode={orderCode} />P
       </div>
     </div>
   );

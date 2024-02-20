@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
@@ -14,6 +15,10 @@ type OrderDetailPageProps = {
   params: {
     orderCode: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: 'Order Details',
 };
 
 export default async function OrderDetailPage({ params: { orderCode } }: OrderDetailPageProps) {

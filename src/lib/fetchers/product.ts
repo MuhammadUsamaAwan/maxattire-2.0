@@ -404,3 +404,19 @@ export async function getProduct(slug: string) {
     },
   });
 }
+
+export const getProductSeo = unstable_cache(
+  async (slug: string) => {
+    return db.query.products.findFirst({
+      where: and(eq(products.slug, slug), isNull(products.deletedAt), eq(products.status, 'active')),
+      columns: {
+        metaTitle: true,
+        metaDescription: true,
+        metaTag: true,
+        metaImg: true,
+      },
+    });
+  },
+  [],
+  { revalidate: 60 }
+);

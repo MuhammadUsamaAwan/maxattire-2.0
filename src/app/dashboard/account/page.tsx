@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { getUser } from '~/lib/auth';
@@ -6,6 +7,10 @@ import { Separator } from '~/components/ui/separator';
 
 import ManageAdresses from './_components/manage-addresses';
 import { UpdateAccountForm } from './_components/update-account-form';
+
+export const metadata: Metadata = {
+  title: 'Your Account',
+};
 
 export default async function AccountPage() {
   const user = await getUser();

@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,6 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { CopyButton } from '~/components/copy-button';
 import { PageHeader } from '~/components/page-header';
 import { PlaceholderImage } from '~/components/placeholder-image';
+
+export const metadata: Metadata = {
+  title: 'Coupons & Promotions',
+  description: 'Get the best deals on your favorite products',
+};
 
 export default async function CouponsPromotionsPage() {
   const coupons = await getCoupons();

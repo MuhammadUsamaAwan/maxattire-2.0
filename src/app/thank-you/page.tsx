@@ -1,8 +1,13 @@
+import { type Metadata } from 'next';
 import Link from 'next/link';
 
 import { buttonVariants } from '~/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
 import { Icons } from '~/components/icons';
+
+export const metadata: Metadata = {
+  title: 'Thank You',
+};
 
 export default function ThankYouPage() {
   return (

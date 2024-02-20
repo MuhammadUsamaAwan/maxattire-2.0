@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { format } from 'date-fns';
@@ -16,6 +17,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Icons } from '~/components/icons';
 
 import { OrderStatusBadge } from './_components/order-status-badge';
+
+export const metadata: Metadata = {
+  title: 'Your Orders',
+};
 
 export default async function OrdersPage() {
   const user = await getUser();

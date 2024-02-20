@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { getUser } from '~/lib/auth';
@@ -10,6 +11,10 @@ import { CartItems } from '~/components/checkout/cart-items';
 import { PageHeader } from '~/components/page-header';
 
 import { OrderConfirmForm } from './_components/order-confirm-form';
+
+export const metadata: Metadata = {
+  title: 'Confrim Order',
+};
 
 export default async function CheckoutPage() {
   const cart = await getCartItems();

@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -9,6 +10,10 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/componen
 import { Separator } from '~/components/ui/separator';
 import { CartItems } from '~/components/checkout/cart-items';
 import { PageHeader } from '~/components/page-header';
+
+export const metadata: Metadata = {
+  title: 'Checkout',
+};
 
 export default async function CartPage() {
   const user = await getUser();

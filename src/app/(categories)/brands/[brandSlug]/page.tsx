@@ -1,3 +1,5 @@
+import { type Metadata } from 'next';
+
 import type { CategoriesSearchParams } from '~/types';
 import { unslugify } from '~/lib/utils';
 
@@ -10,6 +12,13 @@ export type BrandPageProps = {
   };
   searchParams: CategoriesSearchParams;
 };
+
+export function generateMetadata({ params: { brandSlug } }: BrandPageProps): Metadata {
+  return {
+    title: `${unslugify(brandSlug)}'s Collection`,
+    description: `Browse ${unslugify(brandSlug)}'s collection`,
+  };
+}
 
 export default function BrandPage({ searchParams, params: { brandSlug } }: BrandPageProps) {
   return (
