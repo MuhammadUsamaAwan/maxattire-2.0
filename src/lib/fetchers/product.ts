@@ -266,3 +266,13 @@ export const getFilteredProducts = unstable_cache(
     revalidate: 60,
   }
 );
+
+export const getProductSlugTitle = unstable_cache(async (id: number) => {
+  return db.query.products.findFirst({
+    where: eq(products.id, id),
+    columns: {
+      title: true,
+      slug: true,
+    },
+  });
+});

@@ -44,12 +44,12 @@ export function OrderItems({ order, reviewOrder, className, ...props }: Props) {
                     {item.product?.title}
                   </Link>
                   <span className='line-clamp-1 text-xs text-muted-foreground'>
-                    {item.productStock.color?.title} / {item.productStock.size?.title}
+                    {item.productStock.color?.title} - {item.productStock.size?.title}
                   </span>
                   {reviewOrder && (
                     <Link
                       href={`/dashboard/orders/${order.code}/${item.id}/${item.product?.id}`}
-                      className='line-clamp-1 text-sm font-medium text-primary underline-offset-4 hover:underline'
+                      className='line-clamp-1 text-[12px] font-medium text-primary underline-offset-4 hover:underline'
                     >
                       Write a review
                     </Link>

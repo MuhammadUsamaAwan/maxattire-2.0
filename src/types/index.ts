@@ -4,6 +4,7 @@ import type { getCartItems } from '~/lib/fetchers/cart';
 import type { getCategories } from '~/lib/fetchers/category';
 import type { getOrder } from '~/lib/fetchers/order';
 import type { getNewProducts } from '~/lib/fetchers/product';
+import type { getProductReviews } from '~/lib/fetchers/review';
 
 export type JWTPayload = {
   id: number;
@@ -50,3 +51,4 @@ export type CartItems = Awaited<ReturnType<typeof getCartItems>>;
 export type Products = Awaited<ReturnType<typeof getNewProducts>>;
 export type Addresses = Awaited<ReturnType<typeof getAddresses>>;
 export type Order = Awaited<ReturnType<typeof getOrder>>;
+export type ProductReviews = Awaited<ReturnType<typeof getProductReviews>>;

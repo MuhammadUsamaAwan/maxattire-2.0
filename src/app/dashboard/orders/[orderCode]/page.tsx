@@ -56,7 +56,7 @@ export default async function OrderDetailPage({ params: { orderCode } }: OrderDe
         <CardContent className='pb-6 pl-6 pr-0'>
           <OrderItems
             order={order}
-            reviewOrder={order.orderStatuses[order.orderStatuses.length - 1]?.status === 'AWAITING_PAYMENT'}
+            reviewOrder={order.orderStatuses[order.orderStatuses.length - 1]?.status !== 'AWAITING_PAYMENT'}
           />
         </CardContent>
         <Separator className='mb-4' />
