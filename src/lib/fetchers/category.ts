@@ -32,6 +32,5 @@ export const getCategories = unstable_cache(
   ['categories'],
   {
     revalidate: 60,
-    tags: ['categories'],
   }
 );

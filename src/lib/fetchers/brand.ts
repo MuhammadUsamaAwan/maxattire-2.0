@@ -19,6 +19,5 @@ export const getBrands = unstable_cache(
   ['brands'],
   {
     revalidate: 60,
-    tags: ['brands'],
   }
 );

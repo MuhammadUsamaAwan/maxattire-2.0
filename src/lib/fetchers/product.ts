@@ -45,7 +45,6 @@ export const getNewProducts = unstable_cache(
   ['new-products'],
   {
     revalidate: 60,
-    tags: ['products'],
   }
 );
 
@@ -88,7 +87,6 @@ export const getTopProducts = unstable_cache(
   ['top-products'],
   {
     revalidate: 60,
-    tags: ['products'],
   }
 );
 
@@ -131,7 +129,6 @@ export const getFeaturedProducts = unstable_cache(
   ['featured-products'],
   {
     revalidate: 60,
-    tags: ['products'],
   }
 );
 
@@ -174,6 +171,5 @@ export const getWholeSaleProducts = unstable_cache(
   ['wholesale-products'],
   {
     revalidate: 60,
-    tags: ['products'],
   }
 );

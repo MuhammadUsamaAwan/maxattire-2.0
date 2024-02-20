@@ -51,3 +51,7 @@ export function catchError(err: unknown) {
     return toast.error('Something went wrong, please try again later.');
   }
 }
+
+export function getFileUrl(file?: string | null | undefined) {
+  return `${env.NEXT_PUBLIC_FILE_URL}/${file}`;
+}

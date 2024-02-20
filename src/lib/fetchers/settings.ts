@@ -28,6 +28,5 @@ export const getSettings = unstable_cache(
   ['settings'],
   {
     revalidate: 60,
-    tags: ['settings'],
   }
 );
