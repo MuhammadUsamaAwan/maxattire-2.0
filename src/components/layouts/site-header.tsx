@@ -23,9 +23,11 @@ import { MobileNav } from '~/components/layouts/mobile-nav';
 import { ProductSearch } from '~/components/products-search';
 
 export async function SiteHeader() {
-  const user = await getUser();
-  const categories = await getCategories();
-  const brands = await getBrands();
+  const userPromise = getUser();
+  const categoriesPromise = getCategories();
+  const brandsPromise = getBrands();
+
+  const [user, categories, brands] = await Promise.all([userPromise, categoriesPromise, brandsPromise]);
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-background'>

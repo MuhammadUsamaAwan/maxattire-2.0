@@ -7,7 +7,7 @@ export default function NotFound() {
       description='The resource you are looking for does not exist'
       retryLink='/'
       retryLinkText='Go to Home'
-      className='mx-auto mt-20 max-w-md'
+      className='mx-auto my-10 max-w-md'
     />
   );
 }

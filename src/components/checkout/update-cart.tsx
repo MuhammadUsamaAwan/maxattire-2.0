@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import type { CartItems } from '~/types';
 import { removeCartItem, updateCartItem } from '~/lib/actions/cart';
+import { catchError } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Icons } from '~/components/icons';
@@ -30,7 +31,7 @@ export function UpdateCart({ cartItem }: UpdateCartProps) {
                   quantity: Number(cartItem.quantity) - 1,
                 });
               } catch (err) {
-                // catchError(err);
+                catchError(err);
               }
             });
           }}
@@ -52,7 +53,7 @@ export function UpdateCart({ cartItem }: UpdateCartProps) {
                   quantity: Number(e.target.value),
                 });
               } catch (err) {
-                // catchError(err);
+                catchError(err);
               }
             });
           }}
@@ -70,7 +71,7 @@ export function UpdateCart({ cartItem }: UpdateCartProps) {
                   quantity: Number(cartItem.quantity) + 1,
                 });
               } catch (err) {
-                // catchError(err);
+                catchError(err);
               }
             });
           }}
@@ -91,7 +92,7 @@ export function UpdateCart({ cartItem }: UpdateCartProps) {
                 id: cartItem.id,
               });
             } catch (err) {
-              // catchError(err);
+              catchError(err);
             }
           });
         }}

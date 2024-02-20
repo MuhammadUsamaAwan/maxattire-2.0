@@ -9,6 +9,7 @@ import { ThemeProvider } from '~/components/layouts/theme-provider';
 
 import '~/styles/globals.css';
 
+import { SiteFooter } from '~/components/layouts/site-footer';
 import { SiteHeader } from '~/components/layouts/site-header';
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           <TooltipProvider delayDuration={500}>
             <SiteHeader />
             <div className='flex-1'>{children}</div>
+            <SiteFooter />
           </TooltipProvider>
           <Toaster />
         </ThemeProvider>

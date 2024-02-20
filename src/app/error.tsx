@@ -9,5 +9,5 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
     console.error(error);
   }, [error]);
 
-  return <ErrorCard title={error.name} description={error.message} reset={reset} className='mx-auto mt-20 max-w-md' />;
+  return <ErrorCard title={error.name} description={error.message} reset={reset} className='mx-auto my-10 max-w-md' />;
 }
