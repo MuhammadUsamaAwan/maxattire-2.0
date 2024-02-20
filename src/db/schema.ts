@@ -969,6 +969,30 @@ export const verificationtoken = mysqlTable(
   }
 );
 
+/* RELATIONS */
+
+export const addressesRelations = relations(addresses, ({ one }) => ({
+  user: one(users, {
+    fields: [addresses.userId],
+    references: [users.id],
+  }),
+}));
+
+export const cartsRelations = relations(carts, ({ one }) => ({
+  user: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+  product: one(products, {
+    fields: [carts.productId],
+    references: [products.id],
+  }),
+  productStock: one(productStocks, {
+    fields: [carts.productStockId],
+    references: [productStocks.id],
+  }),
+}));
+
 export const categoriesRelations = relations(categories, ({ one, many }) => ({
   children: many(categories, {
     relationName: 'category_children',
@@ -978,20 +1002,107 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
     references: [categories.id],
     relationName: 'category_children',
   }),
+  products: many(products),
+  posts: many(posts),
+  coupons: many(coupons),
 }));
 
-export const cartsRelations = relations(carts, ({ one }) => ({
-  user: one(users, {
-    fields: [carts.userId],
-    references: [users.id],
+export const colorsRelations = relations(colors, ({ many }) => ({
+  productStocks: many(productStocks),
+}));
+
+export const couponCategoriesRelations = relations(couponCategories, ({ one }) => ({
+  coupon: one(coupons, {
+    fields: [couponCategories.couponId],
+    references: [coupons.id],
   }),
-  productStock: one(productStocks, {
-    fields: [carts.productStockId],
-    references: [productStocks.id],
+  category: one(categories, {
+    fields: [couponCategories.categoryId],
+    references: [categories.id],
+  }),
+}));
+
+export const couponsRelations = relations(coupons, ({ many }) => ({
+  categories: many(categories),
+}));
+
+export const orderProductsRelations = relations(orderProducts, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderProducts.orderId],
+    references: [orders.id],
   }),
   product: one(products, {
-    fields: [carts.productId],
+    fields: [orderProducts.productId],
     references: [products.id],
+  }),
+  productStock: one(productStocks, {
+    fields: [orderProducts.productStockId],
+    references: [productStocks.id],
+  }),
+}));
+
+export const orderStatusesRelations = relations(orderStatuses, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderStatuses.orderId],
+    references: [orders.id],
+  }),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userId],
+    references: [users.id],
+  }),
+  address: one(addresses, {
+    fields: [orders.addressId],
+    references: [addresses.id],
+  }),
+  coupon: one(coupons, {
+    fields: [orders.couponId],
+    references: [coupons.id],
+  }),
+  orderProducts: many(orderProducts),
+  orderStatuses: many(orderStatuses),
+}));
+
+export const postCategoriesRelations = relations(postCategories, ({ one }) => ({
+  post: one(posts, {
+    fields: [postCategories.postId],
+    references: [posts.id],
+  }),
+  category: one(categories, {
+    fields: [postCategories.categoryId],
+    references: [categories.id],
+  }),
+}));
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  addedBy: one(users, {
+    fields: [posts.addedById],
+    references: [users.id],
+  }),
+  categories: many(categories),
+}));
+
+export const productCategoriesRelations = relations(productCategories, ({ one }) => ({
+  product: one(products, {
+    fields: [productCategories.productId],
+    references: [products.id],
+  }),
+  category: one(categories, {
+    fields: [productCategories.categoryId],
+    references: [categories.id],
+  }),
+}));
+
+export const productStockImagesRelations = relations(productStockImages, ({ one }) => ({
+  product: one(products, {
+    fields: [productStockImages.productId],
+    references: [products.id],
+  }),
+  productStock: one(productStocks, {
+    fields: [productStockImages.productStockId],
+    references: [productStocks.id],
   }),
 }));
 
@@ -1008,4 +1119,37 @@ export const productStocksRelations = relations(productStocks, ({ one, many }) =
     fields: [productStocks.sizeId],
     references: [sizes.id],
   }),
+  productStockImages: many(productStockImages),
+}));
+
+export const productsRelations = relations(products, ({ many }) => ({
+  categories: many(categories),
+  productStocks: many(productStocks),
+  reviews: many(reviews),
+}));
+
+export const reviewsRelations = relations(reviews, ({ one }) => ({
+  user: one(users, {
+    fields: [reviews.userId],
+    references: [users.id],
+  }),
+  orderProduct: one(orderProducts, {
+    fields: [reviews.orderProductId],
+    references: [orderProducts.id],
+  }),
+  product: one(products, {
+    fields: [reviews.productId],
+    references: [products.id],
+  }),
+}));
+
+export const sizesRelations = relations(sizes, ({ many }) => ({
+  productStocks: many(productStocks),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  addresses: many(addresses),
+  carts: many(carts),
+  orders: many(orders),
+  reviews: many(reviews),
 }));
