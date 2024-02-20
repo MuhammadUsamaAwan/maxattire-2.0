@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: ['/images/favicon.png'],
+  verification: {
+    google: 'qayK1xEvVXM_a8Kvl538Ujkysr5ZO3GwUO9NHQTCQdE',
+  },
 };
 
 export const viewport: Viewport = {
