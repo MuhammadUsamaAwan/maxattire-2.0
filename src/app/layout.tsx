@@ -9,6 +9,8 @@ import { ThemeProvider } from '~/components/layouts/theme-provider';
 
 import '~/styles/globals.css';
 
+import { SiteHeader } from '~/components/layouts/site-header';
+
 export const metadata: Metadata = {
   metadataBase: new URL(absoluteUrl()),
   title: {
@@ -31,7 +33,10 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
     <html lang='en' suppressHydrationWarning>
       <body className={cn('flex min-h-dvh flex-col font-sans antialiased', fontSans.variable)}>
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem disableTransitionOnChange>
-          <TooltipProvider delayDuration={500}>{children}</TooltipProvider>
+          <TooltipProvider delayDuration={500}>
+            <SiteHeader />
+            <div className='flex-1'>{children}</div>
+          </TooltipProvider>
           <Toaster />
         </ThemeProvider>
       </body>

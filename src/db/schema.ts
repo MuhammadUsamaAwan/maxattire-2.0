@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
   bigint,
   date,
@@ -968,3 +968,44 @@ export const verificationtoken = mysqlTable(
     };
   }
 );
+
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
+  children: many(categories, {
+    relationName: 'category_children',
+  }),
+  parent: one(categories, {
+    fields: [categories.parentId],
+    references: [categories.id],
+    relationName: 'category_children',
+  }),
+}));
+
+export const cartsRelations = relations(carts, ({ one }) => ({
+  user: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+  productStock: one(productStocks, {
+    fields: [carts.productStockId],
+    references: [productStocks.id],
+  }),
+  product: one(products, {
+    fields: [carts.productId],
+    references: [products.id],
+  }),
+}));
+
+export const productStocksRelations = relations(productStocks, ({ one, many }) => ({
+  product: one(products, {
+    fields: [productStocks.productId],
+    references: [products.id],
+  }),
+  color: one(colors, {
+    fields: [productStocks.colorId],
+    references: [colors.id],
+  }),
+  size: one(sizes, {
+    fields: [productStocks.sizeId],
+    references: [sizes.id],
+  }),
+}));
