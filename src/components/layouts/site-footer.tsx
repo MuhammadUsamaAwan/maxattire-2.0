@@ -66,6 +66,10 @@ export async function SiteFooter() {
       title: 'Company',
       items: [
         {
+          title: 'Blog',
+          href: '/blog',
+        },
+        {
           title: 'About Us',
           href: '/about-us',
         },
