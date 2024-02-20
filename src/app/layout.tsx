@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.title}`,
   },
   description: siteConfig.description,
+  icons: ['/images/favicon.png'],
 };
 
 export const viewport: Viewport = {

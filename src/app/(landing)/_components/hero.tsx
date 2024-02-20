@@ -11,20 +11,29 @@ export function Hero() {
       <CarouselContent>
         <CarouselItem>
           <Image
-            src='/images/hero1.jpeg'
+            src='/images/hero1.jpg'
             alt='hero'
-            width={1024}
-            height={630}
-            className='h-auto max-h-[500px] w-screen border-b'
+            width={1920}
+            height={1280}
+            className='h-auto max-h-[512px] w-screen border-b'
           />
         </CarouselItem>
         <CarouselItem>
           <Image
-            src='/images/hero2.jpeg'
+            src='/images/hero2.jpg'
             alt='hero'
-            width={1024}
-            height={585}
-            className='h-auto max-h-[500px] w-screen border-b'
+            width={1920}
+            height={1280}
+            className='h-auto max-h-[512px] w-screen border-b'
+          />
+        </CarouselItem>
+        <CarouselItem>
+          <Image
+            src='/images/hero3.jpg'
+            alt='hero'
+            width={1920}
+            height={1280}
+            className='h-auto max-h-[512px] w-screen border-b'
           />
         </CarouselItem>
       </CarouselContent>
