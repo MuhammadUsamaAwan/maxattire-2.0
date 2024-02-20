@@ -57,7 +57,6 @@ export default async function BlogPosts() {
             </CardContent>
           </Card>
         ))}
-        P
       </div>
     </div>
   );

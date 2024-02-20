@@ -1,16 +1,16 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 
 import { siteConfig } from '~/config/site';
 import { fontSans } from '~/lib/fonts';
 import { absoluteUrl, cn } from '~/lib/utils';
 import { Toaster } from '~/components/ui/toaster';
 import { TooltipProvider } from '~/components/ui/tooltip';
+import { SiteFooter } from '~/components/layouts/site-footer';
+import { SiteHeader } from '~/components/layouts/site-header';
 import { ThemeProvider } from '~/components/layouts/theme-provider';
 
 import '~/styles/globals.css';
-
-import { SiteFooter } from '~/components/layouts/site-footer';
-import { SiteHeader } from '~/components/layouts/site-header';
 
 export const metadata: Metadata = {
   metadataBase: new URL(absoluteUrl()),
@@ -46,6 +46,17 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           <Toaster />
         </ThemeProvider>
       </body>
+      <Script id='tawk.io'>
+        {`var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+            (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/650b05cfb1aaa13b7a77ef0f/1hapgtdeu';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+            })();`}
+      </Script>
     </html>
   );
 }
