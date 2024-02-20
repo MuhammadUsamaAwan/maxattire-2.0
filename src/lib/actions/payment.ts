@@ -15,15 +15,16 @@ import { paymentSchema } from '~/lib/validations/payment';
 
 import { getUser } from '../auth';
 
-export async function payment(rawInput: z.infer<typeof paymentSchema>, orderId: number) {
-  const { card, expiry, cvc } = paymentSchema.parse(rawInput);
+export async function payment(rawInput: z.infer<typeof paymentSchema>) {
+  const { card, expiry, cvc, orderCode } = paymentSchema.parse(rawInput);
   const user = await getUser();
   if (!user) {
     throw new Error('Unauthorized');
   }
   const order = await db.query.orders.findFirst({
-    where: and(eq(orders.id, orderId), eq(orders.userId, user.id)),
+    where: and(eq(orders.code, orderCode), eq(orders.userId, user.id)),
     columns: {
+      id: true,
       grandTotal: true,
       code: true,
     },
@@ -77,7 +78,7 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>, orderId: 
           console.log('Transaction ID: ', response.getTransactionResponse().getTransId());
           await db.insert(orderStatuses).values({
             status: 'PAID',
-            orderId,
+            orderId: order.id,
           });
           revalidatePath(`dashboard/orders/${order.code}`);
           revalidatePath(`payment/${order.code}`);

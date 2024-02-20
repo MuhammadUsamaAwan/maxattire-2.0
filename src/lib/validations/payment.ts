@@ -13,4 +13,7 @@ export const paymentSchema = z.object({
   cvc: z.string().regex(/[0-9]{3}/, {
     message: 'Enter a valid cvc',
   }),
+  orderCode: z.string().min(1, {
+    message: 'Order code is required',
+  }),
 });
