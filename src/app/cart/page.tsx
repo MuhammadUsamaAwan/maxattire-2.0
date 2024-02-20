@@ -8,6 +8,7 @@ import { buttonVariants } from '~/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 import { CartItems } from '~/components/checkout/cart-items';
+import { PageHeader } from '~/components/page-header';
 
 export default async function CartPage() {
   const user = await getUser();
@@ -19,10 +20,7 @@ export default async function CartPage() {
 
   return (
     <div className='container grid items-center gap-8 pb-8 pt-6 md:py-8'>
-      <div className='space-y-1'>
-        <h1 className='text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]'>Checkout</h1>
-        <p className='max-w-[750px] text-base text-muted-foreground sm:text-lg'>Checkout with your cart items</p>
-      </div>
+      <PageHeader title='Checkout' description='Checkout with your cart items' className='mb-0' />
       <Card>
         <CardHeader className='flex flex-row items-center space-x-4 py-4'>
           <CardTitle className='line-clamp-1 flex-1'>Your Cart</CardTitle>

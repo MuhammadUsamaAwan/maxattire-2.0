@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import type { Addresses, JWTPayload } from '~/types';
 import { addAddress } from '~/lib/actions/address';
 import { createOrder } from '~/lib/actions/order';
 import { updateUser } from '~/lib/actions/user';
+import { catchError } from '~/lib/utils';
 import { confirmOrderSchema } from '~/lib/validations/order';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
@@ -24,7 +25,7 @@ type OrderConfirmFormProps = {
 
 export function OrderConfirmForm({ session, addresses }: OrderConfirmFormProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = React.useTransition();
   const form = useForm<z.infer<typeof confirmOrderSchema>>({
     resolver: zodResolver(confirmOrderSchema),
     defaultValues: {
@@ -39,7 +40,7 @@ export function OrderConfirmForm({ session, addresses }: OrderConfirmFormProps) 
     },
   });
 
-  async function onSubmit({
+  function onSubmit({
     name,
     phone,
     existingAddress,
@@ -49,24 +50,29 @@ export function OrderConfirmForm({ session, addresses }: OrderConfirmFormProps) 
     city,
     postalCode,
   }: z.infer<typeof confirmOrderSchema>) {
-    setIsLoading(true);
-    let addressId: number | null = null;
-    if (name !== session.name) {
-      await updateUser({ name });
-    }
-    if (existingOrNewAddress === 'new') {
-      addressId = await addAddress({
-        address,
-        state,
-        city,
-        postalCode,
-        phone,
-      });
-    }
-    const orderCode = await createOrder({
-      addressId: addressId ?? Number(existingAddress),
+    startTransition(async () => {
+      try {
+        let addressId: number | null = null;
+        if (name !== session.name) {
+          await updateUser({ name });
+        }
+        if (existingOrNewAddress === 'new') {
+          addressId = await addAddress({
+            address,
+            state,
+            city,
+            postalCode,
+            phone,
+          });
+        }
+        const orderCode = await createOrder({
+          addressId: addressId ?? Number(existingAddress),
+        });
+        router.push(`/payment/${orderCode}`);
+      } catch (error) {
+        catchError(error);
+      }
     });
-    router.push(`/payment/${orderCode}`);
   }
 
   return (
@@ -223,7 +229,7 @@ export function OrderConfirmForm({ session, addresses }: OrderConfirmFormProps) 
             />
           </>
         )}
-        <LoadingButton className='w-full' isLoading={isLoading}>
+        <LoadingButton className='w-full' isLoading={isPending}>
           Confirm Order
         </LoadingButton>
       </form>

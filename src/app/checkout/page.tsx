@@ -7,6 +7,7 @@ import { formatPrice } from '~/lib/utils';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 import { CartItems } from '~/components/checkout/cart-items';
+import { PageHeader } from '~/components/page-header';
 
 import { OrderConfirmForm } from './_components/order-confirm-form';
 
@@ -21,14 +22,7 @@ export default async function CheckoutPage() {
 
   return (
     <div className='container pb-8 pt-6 md:py-8'>
-      <div className='mb-8 space-y-1'>
-        <h1 className='text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]'>
-          Confirm Order
-        </h1>
-        <p className='max-w-[750px] text-base text-muted-foreground sm:text-lg'>
-          Enter your information to place your order
-        </p>
-      </div>
+      <PageHeader title='Confirm Order' description='Enter your information to place your order' />
       <div className='grid gap-8 sm:grid-cols-2'>
         <div>
           <Card>
