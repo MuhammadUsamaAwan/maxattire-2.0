@@ -22,11 +22,10 @@ import { SizeChart } from '../_components/size-chart';
 
 const getCachedData = unstable_cache(
   async (slug: string) => {
-    const sessionPromise = getUser();
     const productPromise = getProduct(slug);
     const colorsPromise = getProductColors(slug);
     const reviewsPromise = getProductReviews(slug);
-    return Promise.all([sessionPromise, productPromise, colorsPromise, reviewsPromise]);
+    return Promise.all([productPromise, colorsPromise, reviewsPromise]);
   },
   [],
   {
@@ -91,7 +90,8 @@ export async function generateMetadata({ params: { productSlug } }: ProductPageP
 }
 
 export default async function ProductPage({ params: { productSlug }, searchParams: { color } }: ProductPageProps) {
-  const [session, product, colors, reviews] = await getCachedData(productSlug);
+  const [product, colors, reviews] = await getCachedData(productSlug);
+  const user = await getUser();
   const [stock, productImages] = await getCachedStockData(productSlug, color);
 
   const images = productImages
@@ -129,7 +129,7 @@ export default async function ProductPage({ params: { productSlug }, searchParam
             </div>
           </div>
           <Separator className='my-1.5' />
-          <AddToCart productId={product.id} colors={colors} stock={stock} color={color} isAuthed={Boolean(session)} />
+          <AddToCart productId={product.id} colors={colors} stock={stock} color={color} isAuthed={Boolean(user)} />
           <Separator className='mt-5' />
           <Tabs defaultValue='description'>
             <TabsList>
