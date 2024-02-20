@@ -2,17 +2,12 @@
 
 import { revalidateTag } from 'next/cache';
 import { and, eq, isNull } from 'drizzle-orm';
-import { z } from 'zod';
+import { type z } from 'zod';
 
 import { db } from '~/db';
 import { carts, products, productStocks } from '~/db/schema';
 import { getUser } from '~/lib/auth';
-
-export const addToCartSchema = z.object({
-  productId: z.number().min(1),
-  productStockId: z.number().min(1),
-  quantity: z.number().min(1),
-});
+import { addToCartSchema, removeCartItemSchema, updateCartItemSchema } from '~/lib/validations/cart';
 
 export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
   const { productId, productStockId, quantity } = addToCartSchema.parse(rawInput);
@@ -64,11 +59,6 @@ export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
   revalidateTag('cart-items');
 }
 
-export const updateCartItemSchema = z.object({
-  id: z.number().min(1),
-  quantity: z.number().min(1),
-});
-
 export async function updateCartItem(rawInput: z.infer<typeof updateCartItemSchema>) {
   const { id, quantity } = updateCartItemSchema.parse(rawInput);
   const user = await getUser();
@@ -81,10 +71,6 @@ export async function updateCartItem(rawInput: z.infer<typeof updateCartItemSche
     .where(and(eq(carts.id, id), eq(carts.userId, user.id)));
   revalidateTag('cart-items');
 }
-
-export const removeCartItemSchema = z.object({
-  id: z.number().min(1),
-});
 
 export async function removeCartItem(rawInput: z.infer<typeof removeCartItemSchema>) {
   const { id } = removeCartItemSchema.parse(rawInput);
