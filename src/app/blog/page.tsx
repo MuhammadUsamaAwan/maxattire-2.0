@@ -34,7 +34,7 @@ export default async function BlogPosts() {
                       alt={post.title}
                       className='object-cover'
                       fill
-                      loading='lazy'
+                      sizes='(min-width: 1500px) 443px, (min-width: 1040px) calc(27.27vw + 39px), (min-width: 780px) calc(50vw - 34px), 93.04vw'
                     />
                   ) : (
                     <PlaceholderImage className='rounded-none' asChild />

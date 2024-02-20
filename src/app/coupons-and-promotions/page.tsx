@@ -28,7 +28,13 @@ export default async function CouponsPromotionsPage() {
               <Link href={`/categories/${coupon.category.slug}`}>
                 <AspectRatio ratio={4 / 3}>
                   {coupon.file ? (
-                    <Image src={getFileUrl(coupon.file)} alt='coupon' className='object-cover' fill loading='lazy' />
+                    <Image
+                      src={getFileUrl(coupon.file)}
+                      alt='coupon'
+                      className='object-cover'
+                      fill
+                      sizes='(min-width: 1500px) 443px, (min-width: 1040px) calc(27.27vw + 39px), (min-width: 780px) calc(50vw - 34px), 93.04vw'
+                    />
                   ) : (
                     <PlaceholderImage className='rounded-none' asChild />
                   )}

@@ -16,6 +16,9 @@ export function Hero() {
             width={1920}
             height={1280}
             className='h-auto max-h-[512px] w-screen border-b'
+            loading='eager'
+            priority
+            sizes='100vw'
           />
         </CarouselItem>
         <CarouselItem>
@@ -25,6 +28,9 @@ export function Hero() {
             width={1920}
             height={1280}
             className='h-auto max-h-[512px] w-screen border-b'
+            loading='eager'
+            priority
+            sizes='100vw'
           />
         </CarouselItem>
         <CarouselItem>
@@ -34,6 +40,7 @@ export function Hero() {
             width={1920}
             height={1280}
             className='h-auto max-h-[512px] w-screen border-b'
+            sizes='100vw'
           />
         </CarouselItem>
       </CarouselContent>

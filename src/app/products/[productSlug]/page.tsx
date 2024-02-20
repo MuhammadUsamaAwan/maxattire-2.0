@@ -94,9 +94,7 @@ export default async function ProductPage({ params: { productSlug }, searchParam
   const user = await getUser();
   const [stock, productImages] = await getCachedStockData(productSlug, color);
 
-  const images = productImages
-    .filter(fileName => fileName !== null)
-    .map(fileName => ({ src: fileName, alt: product?.title ?? '' })) as unknown as { src: string; alt: string }[];
+  const images = productImages.map(image => ({ src: image.fileName ?? '', alt: product?.title ?? '' }));
 
   if (!product) {
     notFound();

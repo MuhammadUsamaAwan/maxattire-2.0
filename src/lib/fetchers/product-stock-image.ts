@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNotNull, isNull } from 'drizzle-orm';
 
 import { db } from '~/db';
 import { colors, products, productStockImages, productStocks } from '~/db/schema';
@@ -17,7 +17,8 @@ export async function getProductStockImages(productSlug: string, colorSlug?: str
     return db
       .select({ fileName: productStockImages.fileName })
       .from(productStockImages)
-      .where(eq(productStockImages.productId, product.id));
+      .where(and(eq(productStockImages.productId, product.id), isNotNull(productStockImages.fileName)))
+      .limit(5);
   const color = await db.query.colors.findFirst({
     where: and(eq(colors.slug, colorSlug), isNull(colors.deletedAt)),
     columns: {
@@ -28,7 +29,8 @@ export async function getProductStockImages(productSlug: string, colorSlug?: str
     return db
       .select({ fileName: productStockImages.fileName })
       .from(productStockImages)
-      .where(eq(productStockImages.productId, product.id));
+      .where(and(eq(productStockImages.productId, product.id), isNotNull(productStockImages.fileName)))
+      .limit(5);
   return db
     .select({
       fileName: productStockImages.fileName,
@@ -40,7 +42,9 @@ export async function getProductStockImages(productSlug: string, colorSlug?: str
         eq(productStockImages.productStockId, productStocks.id),
         eq(productStocks.colorId, color.id),
         isNull(productStocks.deletedAt),
-        eq(productStockImages.productId, product.id)
+        eq(productStockImages.productId, product.id),
+        isNotNull(productStockImages.fileName)
       )
-    );
+    )
+    .limit(5);
 }

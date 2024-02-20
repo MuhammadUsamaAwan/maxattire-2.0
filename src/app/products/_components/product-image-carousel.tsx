@@ -92,7 +92,7 @@ export function ProductImageCarousel({ images, className, options, ...props }: P
                 src={image.src}
                 alt={image.alt}
                 fill
-                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                sizes='(min-width: 1480px) 652px, (min-width: 780px) 45.59vw, 93.04vw'
                 className='object-cover'
                 priority={index === 0}
               />
@@ -112,7 +112,7 @@ export function ProductImageCarousel({ images, className, options, ...props }: P
             <ChevronLeftIcon className='size-3 sm:size-4' aria-hidden='true' />
             <span className='sr-only'>Previous slide</span>
           </Button>
-          {images.slice(0, 5).map((image, i) => (
+          {images.map((image, i) => (
             <Button
               key={i}
               variant='outline'
@@ -128,7 +128,7 @@ export function ProductImageCarousel({ images, className, options, ...props }: P
               <Image
                 src={image.src}
                 alt={image.alt}
-                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                sizes='(min-width: 1480px) 652px, (min-width: 780px) 45.59vw, 93.04vw'
                 fill
               />
               <span className='sr-only'>

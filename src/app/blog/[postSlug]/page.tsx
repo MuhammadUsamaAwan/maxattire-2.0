@@ -78,6 +78,8 @@ export default async function BlogPost({ params: { postSlug } }: BlogPostProps) 
             fill
             className='rounded-md border bg-muted'
             priority
+            loading='eager'
+            sizes='(min-width: 780px) 702px, 93.04vw'
           />
         </AspectRatio>
       </div>

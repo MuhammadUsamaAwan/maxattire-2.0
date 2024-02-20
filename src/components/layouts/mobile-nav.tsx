@@ -37,7 +37,7 @@ export function MobileNav({ categories, brands }: MobileNavProps) {
       <SheetContent side='left' className='pl-1 pr-0'>
         <div className='px-7'>
           <Link href='/' className='flex items-center' onClick={() => setIsOpen(false)}>
-            <Image src='/images/logo.jpeg' alt={siteConfig.title} width={117} height={20} />
+            <Image src='/images/logo.jpeg' alt={siteConfig.title} width={117} height={20} sizes='117px' />
             <span className='sr-only'>Home</span>
           </Link>
         </div>
@@ -64,7 +64,7 @@ export function MobileNav({ categories, brands }: MobileNavProps) {
                       <div className='space-y-2'>
                         {brands.map(brand => (
                           <Link key={brand.slug} href={`/brands/${brand.slug}`} className='block w-max border p-5'>
-                            <Image src={brand.logo ?? ''} alt={brand.slug} width={86} height={38} />
+                            <Image src={brand.logo ?? ''} alt={brand.slug} width={86} height={38} sizes='86px' />
                           </Link>
                         ))}
                       </div>

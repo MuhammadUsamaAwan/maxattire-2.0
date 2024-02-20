@@ -95,7 +95,7 @@ export async function SiteFooter() {
         >
           <section id='footer-branding' aria-labelledby='footer-branding-heading'>
             <Link href='/'>
-              <Image src='/images/logo.jpeg' alt={siteConfig.title} width={117} height={20} />
+              <Image src='/images/logo.jpeg' alt={siteConfig.title} width={117} height={20} sizes='117px' />
             </Link>
           </section>
           <section
