@@ -1,8 +1,10 @@
 import { clsx, type ClassValue } from 'clsx';
+import { isUndefined, omitBy } from 'lodash';
 import { twMerge } from 'tailwind-merge';
 import { ZodError } from 'zod';
 
 import { env } from '~/env';
+import type { CategoriesSearchParams } from '~/types';
 import { toast } from '~/components/ui/toaster';
 
 export function cn(...inputs: ClassValue[]) {
@@ -54,4 +56,24 @@ export function catchError(err: unknown) {
 
 export function getFileUrl(file?: string | null | undefined) {
   return `${env.NEXT_PUBLIC_FILE_URL}/${file}`;
+}
+
+export function unslugify(slug: string) {
+  return slug.replace(/[-_]/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+}
+
+export function getSearchParams(
+  searchParams: CategoriesSearchParams,
+  partialSearchParams: Partial<CategoriesSearchParams>
+) {
+  const newSearchParams = new URLSearchParams(
+    omitBy(
+      {
+        ...searchParams,
+        ...partialSearchParams,
+      },
+      isUndefined
+    ) as Record<string, string>
+  );
+  return `?${newSearchParams.toString()}`;
 }

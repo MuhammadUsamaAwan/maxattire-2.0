@@ -10,6 +10,38 @@ export type JWTPayload = {
   image: string | null;
 };
 
+export type CategoriesFilters = {
+  colors?: string[];
+  sizes?: string[];
+  category?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: string;
+  page?: number;
+};
+
+export type CategoriesSearchParams = {
+  sizes: string | undefined;
+  colors: string | undefined;
+  category: string | undefined;
+  min_price: string | undefined;
+  max_price: string | undefined;
+  sort: string | undefined;
+  page: string | undefined;
+};
+
+export type FilteredCategory = {
+  title: string;
+  slug: string;
+  productCount: number;
+  children: {
+    title: string;
+    slug: string;
+    productCount: number;
+  }[];
+};
+
 export type Categories = Awaited<ReturnType<typeof getCategories>>;
 export type Brands = Awaited<ReturnType<typeof getBrands>>;
 export type CartItems = Awaited<ReturnType<typeof getCartItems>>;
