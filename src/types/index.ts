@@ -2,8 +2,10 @@ import type { getAddresses } from '~/lib/fetchers/address';
 import type { getBrands } from '~/lib/fetchers/brand';
 import type { getCartItems } from '~/lib/fetchers/cart';
 import type { getCategories } from '~/lib/fetchers/category';
+import type { getProductColors } from '~/lib/fetchers/color';
 import type { getOrder } from '~/lib/fetchers/order';
 import type { getNewProducts } from '~/lib/fetchers/product';
+import type { getProductStocks } from '~/lib/fetchers/product-stock';
 import type { getProductReviews } from '~/lib/fetchers/review';
 
 export type JWTPayload = {
@@ -52,3 +54,5 @@ export type Products = Awaited<ReturnType<typeof getNewProducts>>;
 export type Addresses = Awaited<ReturnType<typeof getAddresses>>;
 export type Order = Awaited<ReturnType<typeof getOrder>>;
 export type ProductReviews = Awaited<ReturnType<typeof getProductReviews>>;
+export type ProductColors = Awaited<ReturnType<typeof getProductColors>>;
+export type ProductStocks = Awaited<ReturnType<typeof getProductStocks>>;

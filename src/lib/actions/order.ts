@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { type z } from 'zod';
 
@@ -84,5 +84,7 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
   await Promise.all([...orderProductPromises, orderStatusPromise, deleteCartPromise]);
   revalidateTag('cart-items');
   revalidateTag('orders');
+  revalidatePath(`dashboard/orders/${code}`);
+  revalidatePath(`payment/${code}`);
   return code;
 }

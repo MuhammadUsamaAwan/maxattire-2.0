@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 
 import { unstable_cache } from 'next/cache';
 import { and, eq, isNull } from 'drizzle-orm';
@@ -30,7 +30,10 @@ export const getProductReviews = unstable_cache(
         },
       })
       .from(reviews)
-      .leftJoin(users, and(eq(reviews.userId, users.id), eq(reviews.productId, product.id), isNull(reviews.deletedAt)));
+      .innerJoin(
+        users,
+        and(eq(reviews.userId, users.id), eq(reviews.productId, product.id), isNull(reviews.deletedAt))
+      );
   },
   ['product-reviews'],
   {

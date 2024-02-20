@@ -77,3 +77,12 @@ export function getSearchParams(
   );
   return `?${newSearchParams.toString()}`;
 }
+
+export function getAvgRating(
+  reviews: {
+    rating?: number | null;
+  }[]
+) {
+  if (reviews.length > 0) return reviews.reduce((acc, curr) => acc + (curr.rating ?? 0), 0) / reviews.length;
+  else return 0;
+}
