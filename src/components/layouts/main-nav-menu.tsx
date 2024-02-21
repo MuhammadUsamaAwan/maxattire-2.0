@@ -1,10 +1,10 @@
 import { getBrands } from '~/lib/fetchers/brand';
 import { getCategories } from '~/lib/fetchers/category';
-import { MobileNavMenu } from '~/components/layouts/mobile-nav-menu';
+import { MainNavMenuRender } from '~/components/layouts/main-nav-menu-render';
 
-export async function MobileNav() {
+export async function MainNavMenu() {
   const categories = await getCategories();
   const brands = await getBrands();
 
-  return <MobileNavMenu categories={categories} brands={brands} />;
+  return <MainNavMenuRender categories={categories} brands={brands} />;
 }

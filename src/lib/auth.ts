@@ -1,12 +1,13 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 
 import { env } from '~/env';
 import type { JWTPayload } from '~/types';
 
-export async function getUser() {
+export const getUser = cache(async () => {
   const token = cookies().get('token')?.value;
   if (!token) return null;
   try {
@@ -15,4 +16,4 @@ export async function getUser() {
   } catch (error) {
     return null;
   }
-}
+});

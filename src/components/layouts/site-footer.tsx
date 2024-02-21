@@ -2,24 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { siteConfig } from '~/config/site';
-import { getCategories } from '~/lib/fetchers/category';
-import { getSettings } from '~/lib/fetchers/settings';
 import { Icons } from '~/components/icons';
 
-export async function SiteFooter() {
-  const categoriesPromise = getCategories();
-  const settingsPromise = getSettings();
-
-  const [categories, links] = await Promise.all([categoriesPromise, settingsPromise]);
-
+export function SiteFooter() {
   const footerLinks = [
-    {
-      title: 'Products',
-      items: categories.map(category => ({
-        title: category.title,
-        href: `/categories/${category.slug}`,
-      })),
-    },
     {
       title: 'Customer Service',
       items: [
@@ -49,16 +35,12 @@ export async function SiteFooter() {
       title: 'My Account',
       items: [
         {
-          title: 'Orders Status',
-          href: '/orders-status',
+          title: 'Orders Management',
+          href: '/dashboard/orders',
         },
         {
-          title: 'Wish List',
-          href: '/wish-list',
-        },
-        {
-          title: 'Compare Product List',
-          href: '/compare-product-list',
+          title: 'Manage Account',
+          href: '/dashboard/account',
         },
       ],
     },
@@ -101,7 +83,7 @@ export async function SiteFooter() {
           <section
             id='footer-links'
             aria-labelledby='footer-links-heading'
-            className='grid flex-1 grid-cols-1 gap-10 xxs:grid-cols-2 sm:grid-cols-5'
+            className='grid flex-1 grid-cols-1 gap-10 xxs:grid-cols-2 sm:grid-cols-4'
           >
             {footerLinks.map(item => (
               <div key={item.title} className='space-y-1.5'>
@@ -122,18 +104,17 @@ export async function SiteFooter() {
               <h4 className='text-base font-medium'>Let&apos;s Talk</h4>
               <ul className='space-y-1'>
                 <li>
-                  {links.phone && (
-                    <a href={`tel:${links.phone}`} className='text-sm hover:text-primary'>
-                      {links.phone}
-                    </a>
-                  )}
+                  <a href='tel:(000) 000-0000' className='text-sm hover:text-primary'>
+                    (000) 000-0000
+                  </a>
                 </li>
                 <div>
-                  {links.email && (
-                    <a href={`mailto:${links.email}`} className='text-sm hover:text-primary'>
-                      {links.email}
-                    </a>
-                  )}
+                  <a
+                    href={`mailto:${siteConfig.title.toLowerCase()}@support.com`}
+                    className='text-sm hover:text-primary'
+                  >
+                    {`${siteConfig.title.toLowerCase()}@support.com`}
+                  </a>
                 </div>
               </ul>
             </div>
@@ -145,26 +126,18 @@ export async function SiteFooter() {
           className='mt-6 flex flex-col items-center justify-between gap-6 sm:flex-row'
         >
           <div className='flex items-center space-x-4'>
-            {links.facebook && (
-              <a href={links.facebook} rel='noreferrer' target='_blank' aria-label='facebook'>
-                <Icons.facebook className='size-5' />
-              </a>
-            )}
-            {links.instagram && (
-              <a href={links.instagram} rel='noreferrer' target='_blank' aria-label='instagram'>
-                <Icons.instagram className='size-5' />
-              </a>
-            )}
-            {links.twitter && (
-              <a href={links.twitter} rel='noreferrer' target='_blank' aria-label='twitter'>
-                <Icons.twitter className='size-5' />
-              </a>
-            )}
-            {links.linkedin && (
-              <a href={links.linkedin} rel='noreferrer' target='_blank' aria-label='linkedin'>
-                <Icons.linkedin className='size-5' />
-              </a>
-            )}
+            <a href='https://facebook.com' rel='noreferrer' target='_blank' aria-label='facebook'>
+              <Icons.facebook className='size-5' />
+            </a>
+            <a href='https://instagram.com' rel='noreferrer' target='_blank' aria-label='instagram'>
+              <Icons.instagram className='size-5' />
+            </a>
+            <a href='https://twitter.com' rel='noreferrer' target='_blank' aria-label='twitter'>
+              <Icons.twitter className='size-5' />
+            </a>
+            <a href='https://linkedin.com' rel='noreferrer' target='_blank' aria-label='linkedin'>
+              <Icons.linkedin className='size-5' />
+            </a>
           </div>
           <p className='text-center text-sm sm:text-left'>
             &copy; {new Date().getFullYear()} {siteConfig.title}. All Rights Reserved.

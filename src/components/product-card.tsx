@@ -3,11 +3,11 @@
 import * as React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { AspectRatio } from '@radix-ui/react-aspect-ratio';
 import { uniqBy } from 'lodash';
 
 import type { Products } from '~/types';
 import { formatPrice } from '~/lib/utils';
+import { AspectRatio } from '~/components/ui/aspect-ratio';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
 import { PlaceholderImage } from '~/components/placeholder-image';
