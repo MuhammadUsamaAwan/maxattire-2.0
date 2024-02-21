@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { type Metadata } from 'next';
-import { unstable_cache } from 'next/cache';
 import { notFound } from 'next/navigation';
 
 import { env } from '~/env';
@@ -21,29 +20,6 @@ import { ProductImageCarouselSkeleton } from '../_components/product-image-carou
 import { ProductReviews } from '../_components/product-reviews';
 import { RelatedProducts } from '../_components/related-products';
 import { SizeChart } from '../_components/size-chart';
-
-const getCachedData = unstable_cache(
-  async (slug: string) => {
-    const productPromise = getProduct(slug);
-    const colorsPromise = getProductColors(slug);
-    return Promise.all([productPromise, colorsPromise]);
-  },
-  [],
-  {
-    revalidate: 60,
-  }
-);
-
-const getCachedStockData = unstable_cache(
-  async (productSlug: string, colorSlug?: string) => {
-    const stockPromise = getProductStocks(productSlug, colorSlug);
-    return Promise.all([stockPromise]);
-  },
-  [],
-  {
-    revalidate: 60,
-  }
-);
 
 type ProductPageProps = {
   params: {
@@ -90,9 +66,10 @@ export async function generateMetadata({ params: { productSlug } }: ProductPageP
 }
 
 export default async function ProductPage({ params: { productSlug }, searchParams: { color } }: ProductPageProps) {
-  const [product, colors] = await getCachedData(productSlug);
+  const product = await getProduct(productSlug);
+  const colors = await getProductColors(productSlug);
   const user = await getUser();
-  const [stock] = await getCachedStockData(productSlug, color);
+  const stock = await getProductStocks(productSlug, color);
 
   const rating = !product
     ? 0
