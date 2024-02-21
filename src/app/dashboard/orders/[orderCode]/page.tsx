@@ -48,7 +48,7 @@ export default async function OrderDetailPage({ params: { orderCode } }: OrderDe
             <div className='flex items-center justify-between'>
               <h2>Order# {orderCode}</h2>
               {order?.orderStatuses[0]?.status === 'AWAITING_PAYMENT' ? (
-                <Link href={`/payment/${order.id}`}>
+                <Link href={`/payment/${order.code}`}>
                   <OrderStatusBadge status={order.orderStatuses[order.orderStatuses.length - 1]?.status} />
                 </Link>
               ) : (

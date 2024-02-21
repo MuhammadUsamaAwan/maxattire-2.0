@@ -72,7 +72,7 @@ export default async function OrdersPage() {
                       </DropdownMenuItem>
                       {order.orderStatuses[order.orderStatuses.length - 1]?.status === 'AWAITING_PAYMENT' && (
                         <DropdownMenuItem>
-                          <Link href={`/payment/${order.id}`}>Pay Now</Link>
+                          <Link href={`/payment/${order.code}`}>Pay Now</Link>
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuContent>
