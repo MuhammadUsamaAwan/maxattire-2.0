@@ -45,7 +45,7 @@ export async function SizeChart({ slug }: SizeChartProps) {
             <TableCell className='text-center'>{v.size}</TableCell>
             {titles.map(title => (
               <TableCell key={title} className='text-center'>
-                {v[title] || '-'}
+                {v[title] ?? '-'}
               </TableCell>
             ))}
           </TableRow>

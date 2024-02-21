@@ -410,6 +410,11 @@ export const getProduct = unstable_cache(
             id: true,
           },
         },
+        reviews: {
+          columns: {
+            rating: true,
+          },
+        },
       },
     });
   },
