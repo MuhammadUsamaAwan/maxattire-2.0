@@ -46,7 +46,7 @@ export const getPost = unstable_cache(
       });
     }
   },
-  [],
+  ['post'],
   {
     revalidate: 60,
   }
@@ -66,7 +66,7 @@ export const getPostSeo = unstable_cache(
       });
     }
   },
-  [],
+  ['post-seo'],
   {
     revalidate: 60,
   }

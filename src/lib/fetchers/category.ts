@@ -110,7 +110,7 @@ export const getFilteredCategories = unstable_cache(
     }) as FilteredCategory[];
     return nestedCategories;
   },
-  [],
+  ['filtered-categories'],
   {
     revalidate: 60,
   }

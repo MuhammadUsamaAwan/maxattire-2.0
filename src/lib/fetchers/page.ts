@@ -17,7 +17,7 @@ export const getWebsitePage = unstable_cache(
       });
     }
   },
-  [],
+  ['website-page'],
   {
     revalidate: 60,
   }
@@ -37,7 +37,7 @@ export const getWebsitePageSeo = unstable_cache(
       });
     }
   },
-  [],
+  ['website-page-seo'],
   {
     revalidate: 60,
   }

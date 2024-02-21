@@ -261,52 +261,89 @@ export const getFilteredProducts = unstable_cache(
     });
     return { products: productsResult, productsCount: productIds.length };
   },
-  [],
+  ['filtered-products'],
   {
     revalidate: 60,
   }
 );
 
-export const getProductSlugTitle = unstable_cache(async (id: number) => {
-  return db.query.products.findFirst({
-    where: eq(products.id, id),
-    columns: {
-      title: true,
-      slug: true,
-    },
-  });
-});
+export const getProductSlugTitle = unstable_cache(
+  async (id: number) => {
+    return db.query.products.findFirst({
+      where: eq(products.id, id),
+      columns: {
+        title: true,
+        slug: true,
+      },
+    });
+  },
+  ['product-slug-title'],
+  { revalidate: 60 }
+);
 
-export async function getRelatedProducts(slug: string) {
-  const product = await db.query.products.findFirst({
-    columns: {
-      id: true,
-    },
-    where: eq(products.slug, slug),
-  });
-  if (!product) {
-    return [];
-  }
-  const productCategoriesIds = await db.query.productCategories
-    .findMany({
+export const getRelatedProducts = unstable_cache(
+  async (slug: string) => {
+    const product = await db.query.products.findFirst({
       columns: {
-        categoryId: true,
+        id: true,
       },
-      where: eq(productCategories.productId, product.id),
-    })
-    .then(categories => categories.map(category => category.categoryId));
-  const productIds = await db.query.productCategories
-    .findMany({
-      columns: {
-        productId: true,
-      },
-      where: and(
-        inArray(productCategories.categoryId, productCategoriesIds),
-        ne(productCategories.productId, product.id)
-      ),
-    })
-    .then(products => products.map(product => product.productId));
-  if (!productIds.length) {
+      where: eq(products.slug, slug),
+    });
+    if (!product) {
+      return [];
+    }
+    const productCategoriesIds = await db.query.productCategories
+      .findMany({
+        columns: {
+          categoryId: true,
+        },
+        where: eq(productCategories.productId, product.id),
+      })
+      .then(categories => categories.map(category => category.categoryId));
+    const productIds = await db.query.productCategories
+      .findMany({
+        columns: {
+          productId: true,
+        },
+        where: and(
+          inArray(productCategories.categoryId, productCategoriesIds),
+          ne(productCategories.productId, product.id)
+        ),
+      })
+      .then(products => products.map(product => product.productId));
+    if (!productIds.length) {
+      return db.query.products.findMany({
+        columns: {
+          title: true,
+          slug: true,
+          thumbnail: true,
+          sellPrice: true,
+          discount: true,
+        },
+        with: {
+          productStocks: {
+            columns: {
+              id: true,
+            },
+            with: {
+              color: {
+                columns: {
+                  title: true,
+                  code: true,
+                },
+              },
+            },
+          },
+          reviews: {
+            columns: {
+              rating: true,
+            },
+          },
+        },
+        limit: 8,
+        where: and(isNull(products.deletedAt), eq(products.status, 'active')),
+      });
+    }
     return db.query.products.findMany({
       columns: {
         title: true,
@@ -336,74 +373,49 @@ export async function getRelatedProducts(slug: string) {
         },
       },
       limit: 8,
-      where: and(isNull(products.deletedAt), eq(products.status, 'active')),
+      where: and(isNull(products.deletedAt), eq(products.status, 'active'), inArray(products.id, productIds)),
     });
-  }
-  return db.query.products.findMany({
-    columns: {
-      title: true,
-      slug: true,
-      thumbnail: true,
-      sellPrice: true,
-      discount: true,
-    },
-    with: {
-      productStocks: {
-        columns: {
-          id: true,
-        },
-        with: {
-          color: {
-            columns: {
-              title: true,
-              code: true,
-            },
-          },
-        },
-      },
-      reviews: {
-        columns: {
-          rating: true,
-        },
-      },
-    },
-    limit: 8,
-    where: and(isNull(products.deletedAt), eq(products.status, 'active'), inArray(products.id, productIds)),
-  });
-}
+  },
+  ['related-products'],
+  { revalidate: 60 }
+);
 
-export async function getProduct(slug: string) {
-  return db.query.products.findFirst({
-    where: and(eq(products.slug, slug), isNull(products.deletedAt), eq(products.status, 'active')),
-    columns: {
-      id: true,
-      title: true,
-      slug: true,
-      thumbnail: true,
-      sellPrice: true,
-      discount: true,
-      tax: true,
-      description: true,
-      sku: true,
-    },
-    with: {
-      productStocks: {
-        with: {
-          color: {
-            columns: {
-              title: true,
-              slug: true,
-              code: true,
+export const getProduct = unstable_cache(
+  async (slug: string) => {
+    return db.query.products.findFirst({
+      where: and(eq(products.slug, slug), isNull(products.deletedAt), eq(products.status, 'active')),
+      columns: {
+        id: true,
+        title: true,
+        slug: true,
+        thumbnail: true,
+        sellPrice: true,
+        discount: true,
+        tax: true,
+        description: true,
+        sku: true,
+      },
+      with: {
+        productStocks: {
+          with: {
+            color: {
+              columns: {
+                title: true,
+                slug: true,
+                code: true,
+              },
             },
           },
-        },
-        columns: {
-          id: true,
+          columns: {
+            id: true,
+          },
         },
       },
-    },
-  });
-}
+    });
+  },
+  ['product'],
+  { revalidate: 60 }
+);
 
 export const getProductSeo = unstable_cache(
   async (slug: string) => {
@@ -417,6 +429,6 @@ export const getProductSeo = unstable_cache(
       },
     });
   },
-  [],
+  ['product-seo'],
   { revalidate: 60 }
 );

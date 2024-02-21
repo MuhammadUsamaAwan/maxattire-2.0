@@ -10,37 +10,30 @@ import { Button, buttonVariants } from '~/components/ui/button';
 import { Icons } from '~/components/icons';
 import { ProductCard } from '~/components/product-card';
 
-const getCachedData = unstable_cache(
-  async ({
-    searchParams,
-    brand,
-    category,
-  }: {
-    searchParams: CategoriesSearchParams;
-    brand?: string;
-    category?: string;
-  }) => {
-    const filters = omitBy(
-      {
-        brand,
-        colors: searchParams.colors?.split(','),
-        sizes: searchParams.sizes?.split(','),
-        category: category ?? searchParams.category,
-        minPrice: searchParams.min_price ? Number(searchParams.min_price) : undefined,
-        maxPrice: searchParams.max_price ? Number(searchParams.max_price) : undefined,
-        sort: searchParams.sort,
-        page: searchParams.page ? Number(searchParams.page) : undefined,
-      },
-      isUndefined
-    ) as CategoriesFilters;
-    const productsPromise = getFilteredProducts(filters);
-    return Promise.all([productsPromise]);
-  },
-  [],
-  {
-    revalidate: 1, // 1 minute
-  }
-);
+async function getData({
+  searchParams,
+  brand,
+  category,
+}: {
+  searchParams: CategoriesSearchParams;
+  brand?: string;
+  category?: string;
+}) {
+  const filters = omitBy(
+    {
+      brand,
+      colors: searchParams.colors?.split(','),
+      sizes: searchParams.sizes?.split(','),
+      category: category ?? searchParams.category,
+      minPrice: searchParams.min_price ? Number(searchParams.min_price) : undefined,
+      maxPrice: searchParams.max_price ? Number(searchParams.max_price) : undefined,
+      sort: searchParams.sort,
+      page: searchParams.page ? Number(searchParams.page) : undefined,
+    },
+    isUndefined
+  ) as CategoriesFilters;
+  return getFilteredProducts(filters);
+}
 
 type CategoryProductsProps = {
   searchParams: CategoriesSearchParams;
@@ -49,7 +42,7 @@ type CategoryProductsProps = {
 };
 
 export async function CategoryProducts({ brand, searchParams, category }: CategoryProductsProps) {
-  const [{ products, productsCount }] = await getCachedData({ searchParams, brand, category });
+  const { products, productsCount } = await getData({ searchParams, brand, category });
   const { page } = searchParams;
   const currentPage = Number(page ?? 1);
 

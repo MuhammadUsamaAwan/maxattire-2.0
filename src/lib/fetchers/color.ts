@@ -75,7 +75,7 @@ export const getFilteredColors = unstable_cache(
       .groupBy(colors.id, colors.slug, colors.title, colors.code);
     return filteredColors;
   },
-  [],
+  ['filtered-colors'],
   {
     revalidate: 60,
   }
@@ -109,7 +109,7 @@ export const getProductColors = unstable_cache(
       )
       .groupBy(colors.slug, colors.title, colors.code);
   },
-  [],
+  ['product-colors'],
   {
     revalidate: 60,
   }

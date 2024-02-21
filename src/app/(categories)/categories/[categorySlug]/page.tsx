@@ -1,10 +1,13 @@
+import { Suspense } from 'react';
 import { type Metadata } from 'next';
 
 import type { CategoriesSearchParams } from '~/types';
 import { unslugify } from '~/lib/utils';
 
 import { CategoryFilters } from '../../_components/category-filters';
+import { CategoryFiltersSkeleton } from '../../_components/category-filters-skeleton';
 import { CategoryProducts } from '../../_components/category-products';
+import { CategoryProductsSkeleton } from '../../_components/category-products-skeleton';
 
 export type CategoryPageProps = {
   params: {
@@ -34,10 +37,14 @@ export default function CategoryPage({ searchParams, params: { categorySlug } }:
       <div className='mb-8 space-y-1'>
         <div className='flex flex-col gap-6 lg:flex-row lg:gap-10'>
           <div className='w-full lg:w-80'>
-            <CategoryFilters category={categorySlug} searchParams={searchParams} />
+            <Suspense fallback={<CategoryFiltersSkeleton />}>
+              <CategoryFilters category={categorySlug} searchParams={searchParams} />
+            </Suspense>
           </div>
           <div className='flex-1 sm:mt-1.5'>
-            <CategoryProducts category={categorySlug} searchParams={searchParams} />
+            <Suspense fallback={<CategoryProductsSkeleton />}>
+              <CategoryProducts category={categorySlug} searchParams={searchParams} />
+            </Suspense>
           </div>
         </div>
       </div>

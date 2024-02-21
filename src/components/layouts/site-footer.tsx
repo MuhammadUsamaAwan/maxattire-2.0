@@ -108,14 +108,14 @@ export function SiteFooter() {
                     (000) 000-0000
                   </a>
                 </li>
-                <div>
+                <li>
                   <a
                     href={`mailto:${siteConfig.title.toLowerCase()}@support.com`}
                     className='text-sm hover:text-primary'
                   >
                     {`${siteConfig.title.toLowerCase()}@support.com`}
                   </a>
-                </div>
+                </li>
               </ul>
             </div>
           </section>

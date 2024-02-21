@@ -73,7 +73,7 @@ export const getFilteredSizes = unstable_cache(
       .groupBy(sizes.id, sizes.slug, sizes.title);
     return filteredSizes;
   },
-  [],
+  ['filtered-sizes'],
   {
     revalidate: 60,
   }

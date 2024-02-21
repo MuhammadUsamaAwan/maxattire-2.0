@@ -1,4 +1,3 @@
-import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
 import { ActiveFilters } from '~/app/(categories)/_components/active-filters';
 import { PriceFilter } from '~/app/(categories)/_components/price-filter';
@@ -14,39 +13,33 @@ import { Badge } from '~/components/ui/badge';
 import { Checkbox } from '~/components/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
 
-const getCachedData = unstable_cache(
-  async ({
-    searchParams,
-    brand,
-    category,
-  }: {
-    searchParams: CategoriesSearchParams;
-    brand?: string;
-    category?: string;
-  }) => {
-    const filters = omitBy(
-      {
-        brand,
-        colors: searchParams.colors?.split(','),
-        sizes: searchParams.sizes?.split(','),
-        category: category ?? searchParams.category,
-        minPrice: searchParams.min_price ? Number(searchParams.min_price) : undefined,
-        maxPrice: searchParams.max_price ? Number(searchParams.max_price) : undefined,
-        sort: searchParams.sort,
-        page: searchParams.page ? Number(searchParams.page) : undefined,
-      },
-      isUndefined
-    ) as CategoriesFilters;
-    const categoriesPromise = getFilteredCategories(filters);
-    const sizesPromise = getFilteredSizes(filters);
-    const colorsPromise = getFilteredColors(filters);
-    return Promise.all([categoriesPromise, sizesPromise, colorsPromise]);
-  },
-  [],
-  {
-    revalidate: 60,
-  }
-);
+async function getData({
+  searchParams,
+  brand,
+  category,
+}: {
+  searchParams: CategoriesSearchParams;
+  brand?: string;
+  category?: string;
+}) {
+  const filters = omitBy(
+    {
+      brand,
+      colors: searchParams.colors?.split(','),
+      sizes: searchParams.sizes?.split(','),
+      category: category ?? searchParams.category,
+      minPrice: searchParams.min_price ? Number(searchParams.min_price) : undefined,
+      maxPrice: searchParams.max_price ? Number(searchParams.max_price) : undefined,
+      sort: searchParams.sort,
+      page: searchParams.page ? Number(searchParams.page) : undefined,
+    },
+    isUndefined
+  ) as CategoriesFilters;
+  const categoriesPromise = getFilteredCategories(filters);
+  const sizesPromise = getFilteredSizes(filters);
+  const colorsPromise = getFilteredColors(filters);
+  return Promise.all([categoriesPromise, sizesPromise, colorsPromise]);
+}
 
 type CategoryFiltersProps = {
   searchParams: CategoriesSearchParams;
@@ -55,7 +48,7 @@ type CategoryFiltersProps = {
 };
 
 export async function CategoryFilters({ searchParams, brand, category }: CategoryFiltersProps) {
-  const [categories, sizes, colors] = await getCachedData({ searchParams, brand, category });
+  const [categories, sizes, colors] = await getData({ searchParams, brand, category });
 
   const selectedSizes = searchParams.sizes?.split(',') ?? [];
   const selectedColors = searchParams.colors?.split(',') ?? [];
