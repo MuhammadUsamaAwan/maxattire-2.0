@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -18,6 +18,7 @@ import { PasswordInput } from '~/components/password-input';
 type Inputs = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
+  const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
 
   const form = useForm<Inputs>({
@@ -32,7 +33,7 @@ export function SignInForm() {
     startTransition(async () => {
       try {
         await signInWithCredentials(data);
-        redirect('/');
+        router.back();
       } catch (error) {
         catchError(error);
       }

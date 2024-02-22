@@ -71,7 +71,7 @@ export async function GET(request: Request) {
       throw new Error('User not found');
     }
     await setAccessToken({ id: user.id, email: user.email, name: user.name, image: user.image });
-    revalidateTag('cart');
+    revalidateTag('cart-items');
     return redirect('/');
   }
 }

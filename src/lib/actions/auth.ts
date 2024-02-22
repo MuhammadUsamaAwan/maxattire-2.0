@@ -3,7 +3,6 @@
 
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { compare, hash } from 'bcryptjs';
 import { and, eq, isNull } from 'drizzle-orm';
 import { SignJWT } from 'jose';
@@ -43,7 +42,6 @@ export async function signInWithCredentials(rawInput: z.infer<typeof signInSchem
   }
   await setAccessToken({ id: user.id, email: user.email, name: user.name, image: user.image });
   revalidateTag('cart-items');
-  return redirect('/');
 }
 
 export async function signUpWithCredentials(rawInput: z.infer<typeof signUpSchema>) {
@@ -69,7 +67,6 @@ export async function signUpWithCredentials(rawInput: z.infer<typeof signUpSchem
     }
     await setAccessToken({ id: user.id, email: user.email, name: user.name, image: user.image });
     revalidateTag('cart-items');
-    return redirect('/');
   } catch (error) {
     if (
       typeof error === 'object' &&
