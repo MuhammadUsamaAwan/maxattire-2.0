@@ -50,7 +50,7 @@ export function ProductCard({ product }: ProductCard) {
       </CardHeader>
       <CardContent className='space-y-1.5 p-4'>
         <CardTitle className='line-clamp-1'>
-          <Link href={`/products/${product.title}`}>{product.title}</Link>
+          <Link href={`/products/${product.slug}`}>{product.title}</Link>
         </CardTitle>
         <div>
           {product.discount && product.discount > 0 ? (

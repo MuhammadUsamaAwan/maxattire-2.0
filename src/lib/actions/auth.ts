@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { compare, hash } from 'bcryptjs';
 import { and, eq, isNull } from 'drizzle-orm';
@@ -41,7 +41,7 @@ export async function signInWithCredentials(rawInput: z.infer<typeof signInSchem
     throw new Error('User is blocked');
   }
   await setAccessToken({ id: user.id, email: user.email, name: user.name, image: user.image });
-  revalidateTag('cart-items');
+  revalidatePath('/', 'layout');
 }
 
 export async function signUpWithCredentials(rawInput: z.infer<typeof signUpSchema>) {
@@ -66,7 +66,7 @@ export async function signUpWithCredentials(rawInput: z.infer<typeof signUpSchem
       throw new Error('User not found');
     }
     await setAccessToken({ id: user.id, email: user.email, name: user.name, image: user.image });
-    revalidateTag('cart-items');
+    revalidatePath('/', 'layout');
   } catch (error) {
     if (
       typeof error === 'object' &&
@@ -88,7 +88,7 @@ export async function signOut() {
     sameSite: 'lax',
     maxAge: 0,
   });
-  revalidateTag('cart-items');
+  revalidatePath('/', 'layout');
 }
 
 export async function setAccessToken(jwtPayload: JWTPayload) {

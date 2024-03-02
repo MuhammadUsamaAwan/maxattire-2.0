@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { and, desc, eq } from 'drizzle-orm';
 
 import { db } from '~/db';
@@ -11,7 +12,7 @@ export const getOrders = unstable_cache(
   async () => {
     const user = await getUser();
     if (!user) {
-      throw new Error('Unauthorized');
+      redirect('/signin');
     }
     return db.query.orders.findMany({
       where: eq(orders.userId, user.id),
@@ -28,7 +29,7 @@ export const getOrders = unstable_cache(
           },
         },
       },
-      orderBy: desc(orders.createdAt),
+      orderBy: desc(orders.id),
     });
   },
   ['orders'],
@@ -42,7 +43,7 @@ export const getOrder = unstable_cache(
   async (code: string) => {
     const user = await getUser();
     if (!user) {
-      throw new Error('Unauthorized');
+      redirect('/signin');
     }
     return db.query.orders.findFirst({
       where: and(eq(orders.userId, user.id), eq(orders.code, code)),

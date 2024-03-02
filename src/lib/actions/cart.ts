@@ -79,5 +79,5 @@ export async function removeCartItem(rawInput: z.infer<typeof removeCartItemSche
     throw new Error('Unauthorized');
   }
   await db.delete(carts).where(and(eq(carts.id, id), eq(carts.userId, user.id)));
-  revalidateTag('cart');
+  revalidateTag('cart-items');
 }

@@ -1,4 +1,3 @@
-import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
 import { SortProducts } from '~/app/(categories)/_components/sort-products';
 import { isUndefined, omitBy } from 'lodash';

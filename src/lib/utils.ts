@@ -38,6 +38,8 @@ export function formatPrice(
     style: 'currency',
     currency,
     notation,
+    minimumFractionDigits: 2,
+    maximumSignificantDigits: 3,
   }).format(Number(price));
 }
 

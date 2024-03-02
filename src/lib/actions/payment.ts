@@ -10,10 +10,9 @@ import { type z } from 'zod';
 
 import { env } from '~/env';
 import { db } from '~/db';
-import { orders, orderStatuses } from '~/db/schema';
+import { orderProducts, orders, orderStatuses, productStocks } from '~/db/schema';
+import { getUser } from '~/lib/auth';
 import { paymentSchema } from '~/lib/validations/payment';
-
-import { getUser } from '../auth';
 
 export async function payment(rawInput: z.infer<typeof paymentSchema>) {
   const { card, expiry, cvc, orderCode } = paymentSchema.parse(rawInput);
@@ -63,6 +62,9 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>) {
   createRequest.setMerchantAuthentication(merchantAuthenticationType);
   createRequest.setTransactionRequest(transactionRequestType);
   const ctrl = new APIControllers.CreateTransactionController(createRequest.getJSON());
+  if (env.NODE_ENV === 'production' && env.AUTHORIZE_NET_SANDBOX !== 'true') {
+    ctrl.setEnvironment('PRODUCTION');
+  }
   ctrl.execute(async () => {
     const apiResponse = ctrl.getResponse();
     const response = new APIContracts.CreateTransactionResponse(apiResponse);
@@ -80,6 +82,28 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>) {
             status: 'PAID',
             orderId: order.id,
           });
+          const products = await db.query.orderProducts.findMany({
+            where: eq(orderProducts.orderId, order.id),
+            columns: {
+              quantity: true,
+              productStockId: true,
+            },
+          });
+          await Promise.all(
+            products.map(async product => {
+              const productStock = await db.query.productStocks.findFirst({
+                where: eq(productStocks.id, product.productStockId),
+                columns: {
+                  quantity: true,
+                },
+              });
+              await db
+                .update(productStocks)
+                .set({ quantity: (productStock?.quantity ?? 0) - (product.quantity ?? 0) })
+                .where(eq(productStocks.id, product.productStockId));
+            })
+          );
+          revalidatePath('/products/[productSlug]', 'page');
           revalidatePath(`dashboard/orders/${order.code}`);
           revalidatePath(`payment/${order.code}`);
           revalidateTag('cart-items');
@@ -90,7 +114,6 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>) {
             console.log('Error Code: ', response.getTransactionResponse().getErrors().getError()[0].getErrorCode());
             console.log('Error message: ', response.getTransactionResponse().getErrors().getError()[0].getErrorText());
           }
-          throw new Error('Transaction Failed');
         }
       } else {
         console.log('Transaction Failed');
@@ -101,11 +124,9 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>) {
           console.log('Error Code: ', response.getMessages().getMessage()[0].getCode());
           console.log('Error message: ', response.getMessages().getMessage()[0].getText());
         }
-        throw new Error('Transaction Failed');
       }
     } else {
       console.log('Null Response.');
-      throw new Error('Transaction Failed');
     }
   });
 }

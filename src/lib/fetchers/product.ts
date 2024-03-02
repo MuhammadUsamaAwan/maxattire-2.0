@@ -5,7 +5,7 @@ import { and, asc, desc, eq, gt, inArray, isNull, lt, ne } from 'drizzle-orm';
 
 import type { CategoriesFilters } from '~/types';
 import { db } from '~/db';
-import { categories, colors, productCategories, products, productStocks, sizes } from '~/db/schema';
+import { categories, colors, productCategories, products, productStocks, sizes, stores } from '~/db/schema';
 
 export const getNewProducts = unstable_cache(
   async () => {
@@ -177,6 +177,14 @@ export const getWholeSaleProducts = unstable_cache(
 
 export const getFilteredProducts = unstable_cache(
   async (filter?: CategoriesFilters) => {
+    const brandPromise = filter?.brand
+      ? db.query.stores.findFirst({
+          where: eq(stores.slug, filter.brand),
+          columns: {
+            id: true,
+          },
+        })
+      : undefined;
     const colorsIdsPromise = filter?.colors
       ? db.query.colors
           .findMany({
@@ -205,7 +213,12 @@ export const getFilteredProducts = unstable_cache(
           },
         })
       : undefined;
-    const [sizesIds, colorsIds, category] = await Promise.all([sizesIdsPromise, colorsIdsPromise, categoryPromise]);
+    const [brand, sizesIds, colorsIds, category] = await Promise.all([
+      brandPromise,
+      sizesIdsPromise,
+      colorsIdsPromise,
+      categoryPromise,
+    ]);
     const productIds = await db
       .select({
         id: products.id,
@@ -221,7 +234,8 @@ export const getFilteredProducts = unstable_cache(
           sizesIds && inArray(productStocks.sizeId, sizesIds),
           colorsIds && inArray(productStocks.colorId, colorsIds),
           eq(products.status, 'active'),
-          isNull(products.deletedAt)
+          isNull(products.deletedAt),
+          brand && eq(products.storeId, brand.id)
         )
       )
       .groupBy(products.id)

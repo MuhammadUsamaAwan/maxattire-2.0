@@ -15,30 +15,32 @@ export const getProductStockImages = unstable_cache(
       },
     });
     if (!product) return [];
-    if (!colorSlug)
+    if (!colorSlug) {
       return db
         .select({ fileName: productStockImages.fileName })
         .from(productStockImages)
         .where(and(eq(productStockImages.productId, product.id), isNotNull(productStockImages.fileName)))
         .limit(5);
+    }
     const color = await db.query.colors.findFirst({
       where: and(eq(colors.slug, colorSlug), isNull(colors.deletedAt)),
       columns: {
         id: true,
       },
     });
-    if (!color)
+    if (!color) {
       return db
         .select({ fileName: productStockImages.fileName })
         .from(productStockImages)
         .where(and(eq(productStockImages.productId, product.id), isNotNull(productStockImages.fileName)))
         .limit(5);
+    }
     return db
       .select({
         fileName: productStockImages.fileName,
       })
       .from(productStockImages)
-      .leftJoin(
+      .innerJoin(
         productStocks,
         and(
           eq(productStockImages.productStockId, productStocks.id),

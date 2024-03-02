@@ -1,4 +1,4 @@
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { and, eq, isNull } from 'drizzle-orm';
 
@@ -71,7 +71,7 @@ export async function GET(request: Request) {
       throw new Error('User not found');
     }
     await setAccessToken({ id: user.id, email: user.email, name: user.name, image: user.image });
-    revalidateTag('cart-items');
+    revalidatePath('/', 'layout');
     return redirect('/');
   }
 }

@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { and, eq, isNull } from 'drizzle-orm';
 
 import { db } from '~/db';
@@ -46,7 +47,7 @@ export const getOrderProductReview = unstable_cache(
   async (orderProductId: number, productId: number) => {
     const user = await getUser();
     if (!user) {
-      throw new Error('Unauthorized');
+      redirect('/signin');
     }
     return db.query.reviews.findFirst({
       where: and(
