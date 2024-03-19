@@ -32,6 +32,7 @@ async function getData({
       maxPrice: searchParams.max_price ? Number(searchParams.max_price) : undefined,
       sort: searchParams.sort,
       page: searchParams.page ? Number(searchParams.page) : undefined,
+      q: searchParams.q,
     },
     isUndefined
   ) as CategoriesFilters;

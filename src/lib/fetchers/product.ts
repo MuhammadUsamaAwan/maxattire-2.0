@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
-import { and, asc, desc, eq, gt, inArray, isNull, lt, ne } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, isNull, like, lt, ne } from 'drizzle-orm';
 
 import type { CategoriesFilters } from '~/types';
 import { db } from '~/db';
@@ -235,7 +235,8 @@ export const getFilteredProducts = unstable_cache(
           colorsIds && inArray(productStocks.colorId, colorsIds),
           eq(products.status, 'active'),
           isNull(products.deletedAt),
-          brand && eq(products.storeId, brand.id)
+          brand && eq(products.storeId, brand.id),
+          filter?.q ? like(products.title, `%${filter.q}%`) : undefined
         )
       )
       .groupBy(products.id)

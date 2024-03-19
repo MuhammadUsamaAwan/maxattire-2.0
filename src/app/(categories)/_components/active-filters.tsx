@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import type { CategoriesSearchParams } from '~/types';
-import { cn, getSearchParams, unslugify } from '~/lib/utils';
+import { cn, getSearchParams } from '~/lib/utils';
 import { Badge } from '~/components/ui/badge';
 import { buttonVariants } from '~/components/ui/button';
 import { Icons } from '~/components/icons';
@@ -12,6 +12,15 @@ import { Icons } from '~/components/icons';
 type ActiveFiltersProps = {
   searchParams: CategoriesSearchParams;
 };
+
+const mapping = new Map([
+  ['category', 'Category'],
+  ['sizes', 'Sizes'],
+  ['colors', 'Colors'],
+  ['min_price', 'Min Price'],
+  ['max_price', 'Max Price'],
+  ['q', 'Search'],
+]);
 
 const order = ['category', 'sizes', 'colors', 'min_price', 'max_price'];
 
@@ -30,7 +39,7 @@ export function ActiveFilters({ searchParams }: ActiveFiltersProps) {
       <div className='font-semibold'>Active Filters:</div>
       {sortedSearchParams?.map(([key, value]) => (
         <div key={key} className='flex flex-wrap items-center gap-2'>
-          <span className='text-sm font-medium'>{unslugify(key)}:</span>
+          <span className='text-sm font-medium'>{mapping.get(key)}:</span>
           {value?.split(',').map((v, i) => (
             <button
               key={i}

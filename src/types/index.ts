@@ -16,6 +16,7 @@ export type JWTPayload = {
 };
 
 export type CategoriesFilters = {
+  q?: string;
   colors?: string[];
   sizes?: string[];
   category?: string;
@@ -27,6 +28,7 @@ export type CategoriesFilters = {
 };
 
 export type CategoriesSearchParams = {
+  q: string | undefined;
   sizes: string | undefined;
   colors: string | undefined;
   category: string | undefined;
