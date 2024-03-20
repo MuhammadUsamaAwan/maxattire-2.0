@@ -241,6 +241,9 @@ export const getFilteredProducts = unstable_cache(
       )
       .groupBy(products.id)
       .then(products => products.map(product => product.id));
+    if (!productIds.length) {
+      return { products: [], productsCount: 0 };
+    }
     const productsResult = await db.query.products.findMany({
       columns: {
         title: true,
