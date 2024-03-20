@@ -6,15 +6,30 @@ import { type z } from 'zod';
 
 import { siteConfig } from '~/config/site';
 import { db } from '~/db';
-import { carts, orderProducts, orders, orderStatuses } from '~/db/schema';
+import { addresses, carts, orderProducts, orders, orderStatuses } from '~/db/schema';
 import { getUser } from '~/lib/auth';
 import { createOrderSchema } from '~/lib/validations/order';
+
+import { sendOrderEmail } from '../email';
 
 export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
   const { addressId } = createOrderSchema.parse(rawInput);
   const user = await getUser();
   if (!user) {
     throw new Error('Unauthorized');
+  }
+  const address = await db.query.addresses.findFirst({
+    where: eq(addresses.id, addressId),
+    columns: {
+      state: true,
+      city: true,
+      address: true,
+      phone: true,
+      postalCode: true,
+    },
+  });
+  if (!address) {
+    throw new Error('Address not found');
   }
   const cart = await db.query.carts.findMany({
     where: eq(carts.userId, user.id),
@@ -27,6 +42,9 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
       product: {
         columns: {
           id: true,
+          title: true,
+          slug: true,
+          thumbnail: true,
         },
       },
       productStock: {
@@ -38,11 +56,13 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
           size: {
             columns: {
               id: true,
+              title: true,
             },
           },
           color: {
             columns: {
               id: true,
+              title: true,
             },
           },
         },
@@ -80,8 +100,32 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
     orderId,
     status: 'AWAITING_PAYMENT',
   });
+  const sendOrderEmailPromise = sendOrderEmail({
+    to: user.email,
+    code,
+    grandTotal,
+    orderProducts: cart.map(cart => ({
+      price: cart.productStock?.price ?? 0,
+      quantity: cart.quantity ?? 0,
+      product: {
+        title: cart.product?.title ?? '',
+        slug: cart.product?.slug ?? '',
+        thumbnail: cart.product?.thumbnail ?? '',
+      },
+      productStock: {
+        size: {
+          title: cart.productStock?.size?.title ?? '',
+        },
+        color: {
+          title: cart.productStock?.color?.title ?? '',
+        },
+      },
+    })),
+    address,
+  });
   const deleteCartPromise = db.delete(carts).where(eq(carts.userId, user.id));
-  await Promise.all([...orderProductPromises, orderStatusPromise, deleteCartPromise]);
+
+  await Promise.all([...orderProductPromises, orderStatusPromise, deleteCartPromise, sendOrderEmailPromise]);
   revalidateTag('cart-items');
   revalidateTag('orders');
   revalidatePath(`dashboard/orders/${code}`);
