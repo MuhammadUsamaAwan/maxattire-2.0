@@ -37,6 +37,13 @@ export function AddToCart({ productId, stock, colors, color, isAuthed }: AddToCa
     setCartData([]);
   }, [stock]);
 
+  React.useEffect(() => {
+    if (colors && colors.length > 0) {
+      router.replace(`?${new URLSearchParams({ color: colors[0]?.slug ?? '' }).toString()}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function addProductToCart() {
     if (!isAuthed) {
       router.push('/signin');
