@@ -8,9 +8,8 @@ import { siteConfig } from '~/config/site';
 import { db } from '~/db';
 import { addresses, carts, orderProducts, orders, orderStatuses } from '~/db/schema';
 import { getUser } from '~/lib/auth';
+import { sendOrderEmail } from '~/lib/email';
 import { createOrderSchema } from '~/lib/validations/order';
-
-import { sendOrderEmail } from '../email';
 
 export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
   const { addressId } = createOrderSchema.parse(rawInput);

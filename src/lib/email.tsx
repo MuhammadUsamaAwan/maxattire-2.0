@@ -1,18 +1,16 @@
 import { render } from '@react-email/render';
 import { createTransport } from 'nodemailer';
 
+import { env } from '~/env';
 import { siteConfig } from '~/config/site';
 import { OrderEmail, type OrderEmailProps } from '~/components/emails/order';
 
-// TODO: Replace with your own SMTP credentials
-
 const transporter = createTransport({
-  host: 'smtp.forwardemail.net',
-  port: 465,
-  secure: true,
+  host: env.SMTP_HOST,
+  port: Number(env.SMTP_PORT),
   auth: {
-    user: 'my_user',
-    pass: 'my_password',
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASSWORD,
   },
 });
 
@@ -22,11 +20,13 @@ type SendOrderEmailProps = OrderEmailProps & {
 
 export async function sendOrderEmail({ to, ...props }: SendOrderEmailProps) {
   const emailHtml = render(<OrderEmail {...props} />);
-  const options = {
-    from: '',
-    to,
+  await transporter.sendMail({
+    from: {
+      name: siteConfig.title,
+      address: env.SMTP_USER,
+    },
+    to: 'underusama@gmail.com',
     subject: `Your ${siteConfig.title} order #${props.code} has been placed`,
     html: emailHtml,
-  };
-  await transporter.sendMail(options);
+  });
 }
