@@ -50,7 +50,7 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='example@test.com' {...field} />
+                <Input type='email' placeholder='example@test.com' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
