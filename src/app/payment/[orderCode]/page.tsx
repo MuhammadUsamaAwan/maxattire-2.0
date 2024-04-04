@@ -59,7 +59,7 @@ export default async function PaymentPage({ params: { orderCode } }: PaymentPage
             </CardFooter>
           </Card>
         </div>
-        <PaymentForm orderCode={orderCode} />P
+        <PaymentForm orderCode={orderCode} />
       </div>
     </div>
   );

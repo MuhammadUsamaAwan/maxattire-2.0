@@ -2,10 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { getBrands } from '~/lib/fetchers/brand';
-import { buttonVariants } from '~/components/ui/button';
 import { ContentSection } from '~/components/content-section';
 
-export async function Brands() {
+export default async function BrandsPage() {
   const brands = await getBrands();
 
   return (
@@ -22,11 +21,6 @@ export async function Brands() {
             />
           </Link>
         ))}
-      </div>
-      <div className='mt-8 flex justify-center'>
-        <Link href='/brands' className={buttonVariants({ size: 'lg' })}>
-          Show All Brands
-        </Link>
       </div>
     </ContentSection>
   );

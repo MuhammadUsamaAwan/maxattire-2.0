@@ -411,7 +411,6 @@ export const getProduct = unstable_cache(
         discount: true,
         tax: true,
         description: true,
-        sku: true,
       },
       with: {
         productStocks: {
@@ -431,6 +430,12 @@ export const getProduct = unstable_cache(
         reviews: {
           columns: {
             rating: true,
+          },
+        },
+        store: {
+          columns: {
+            name: true,
+            logo: true,
           },
         },
       },

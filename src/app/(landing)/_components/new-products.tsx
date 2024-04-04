@@ -5,6 +5,11 @@ export async function NewProducts() {
   const newProducts = await getNewProducts();
 
   return (
-    <ProductCarouselSection products={newProducts} title='New Arrivals' description='Explore our latest products' />
+    <ProductCarouselSection
+      products={newProducts}
+      title='New Arrivals'
+      description='Explore our latest products'
+      className='bg-accent'
+    />
   );
 }

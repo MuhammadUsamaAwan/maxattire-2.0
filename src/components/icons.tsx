@@ -29,6 +29,8 @@ import { CircleUserRoundIcon, DollarSignIcon, Loader2Icon, ShoppingCartIcon } fr
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 import { FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { FaGoogle, FaXTwitter } from 'react-icons/fa6';
+import { FiTruck } from 'react-icons/fi';
+import { MdOutlineCelebration, MdOutlineDiscount } from 'react-icons/md';
 import { RiMailSendLine } from 'react-icons/ri';
 
 export const Icons = {
@@ -70,4 +72,7 @@ export const Icons = {
   google: FaGoogle,
   twitter: FaXTwitter,
   mailSend: RiMailSendLine,
+  discount: MdOutlineDiscount,
+  celebration: MdOutlineCelebration,
+  truck: FiTruck,
 };

@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { type Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { env } from '~/env';
@@ -84,15 +85,37 @@ export default async function ProductPage({ params: { productSlug }, searchParam
   return (
     <div className='container space-y-8 pb-8 pt-6 md:py-8'>
       <div className='flex flex-col gap-8 md:flex-row md:gap-16'>
-        <Suspense fallback={<ProductImageCarouselSkeleton />}>
-          <ProductCarousel productSlug={productSlug} colorSlug={color} />
-        </Suspense>
+        <div className='w-full sm:w-1/2'>
+          <Suspense fallback={<ProductImageCarouselSkeleton />}>
+            <ProductCarousel productSlug={productSlug} colorSlug={color} />
+          </Suspense>
+          <Tabs defaultValue='description' className='mt-8'>
+            <TabsList>
+              <TabsTrigger value='description'>Description</TabsTrigger>
+              <TabsTrigger value='sizeChart'>Size Chart</TabsTrigger>
+            </TabsList>
+            <TabsContent value='description'>
+              <div
+                className='prose max-w-full dark:prose-invert'
+                dangerouslySetInnerHTML={{
+                  __html: product?.description ?? 'No description is available for this product.',
+                }}
+              />
+            </TabsContent>
+            <TabsContent value='sizeChart'>
+              <Suspense fallback={<TableSkeleton header={4} items={4} />}>
+                <SizeChart slug={productSlug} />
+              </Suspense>
+            </TabsContent>
+          </Tabs>
+        </div>
         <Separator className='mt-4 md:hidden' />
         <div className='flex w-full flex-col gap-4 md:w-1/2'>
           <div className='space-y-2'>
             <h2 className='line-clamp-1 text-2xl font-bold'>{product?.title}</h2>
-            <div>
-              <span className='font-medium'>SKU:</span> {product?.sku}
+            <div className='flex items-center gap-4'>
+              <Image src={product?.store?.logo ?? ''} alt={product?.store?.name ?? ''} width={43} height={19} />
+              <span>{product?.store?.name}</span>
             </div>
             <div className='flex items-center space-x-2'>
               <Rating rating={rating} />
@@ -112,25 +135,6 @@ export default async function ProductPage({ params: { productSlug }, searchParam
           <Separator className='my-1.5' />
           <AddToCart productId={product.id} colors={colors} stock={stock} color={color} isAuthed={Boolean(user)} />
           <Separator className='mt-5' />
-          <Tabs defaultValue='description'>
-            <TabsList>
-              <TabsTrigger value='description'>Description</TabsTrigger>
-              <TabsTrigger value='sizeChart'>Size Chart</TabsTrigger>
-            </TabsList>
-            <TabsContent value='description'>
-              <div
-                className='prose max-w-full dark:prose-invert'
-                dangerouslySetInnerHTML={{
-                  __html: product?.description ?? 'No description is available for this product.',
-                }}
-              />
-            </TabsContent>
-            <TabsContent value='sizeChart'>
-              <Suspense fallback={<TableSkeleton header={4} items={4} />}>
-                <SizeChart slug={productSlug} />
-              </Suspense>
-            </TabsContent>
-          </Tabs>
         </div>
       </div>
       <Suspense

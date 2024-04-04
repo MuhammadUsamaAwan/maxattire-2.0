@@ -11,5 +11,5 @@ export async function ProductCarousel({ productSlug, colorSlug }: ProductCarouse
   const stockImages = await getProductStockImages(productSlug, colorSlug);
   const images = stockImages.map(image => ({ src: image.fileName ?? '', alt: `${productSlug} - ${colorSlug ?? ''}` }));
 
-  return <ProductImageCarousel className='w-full md:w-1/2' images={images} />;
+  return <ProductImageCarousel images={images} />;
 }

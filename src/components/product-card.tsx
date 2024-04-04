@@ -38,7 +38,7 @@ export function ProductCard({ product }: ProductCard) {
               <Image
                 src={product.thumbnail ?? ''}
                 alt={product.title}
-                className='object-cover'
+                className='object-contain'
                 fill
                 sizes='(min-width: 1480px) 433px, (min-width: 800px) 30.3vw, (min-width: 640px) calc(25.71vw + 25px), calc(100vw - 34px)'
               />

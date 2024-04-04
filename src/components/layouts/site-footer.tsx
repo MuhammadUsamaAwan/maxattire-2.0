@@ -7,11 +7,11 @@ import { Icons } from '~/components/icons';
 export function SiteFooter() {
   const footerLinks = [
     {
-      title: 'Customer Service',
+      title: 'Our Company',
       items: [
         {
-          title: 'Apparel Decoration',
-          href: '/apparel-decoration',
+          title: 'Apparel',
+          href: '/apparel',
         },
         {
           title: 'Coupons & Promotions',
@@ -22,46 +22,25 @@ export function SiteFooter() {
           href: '/contact-us',
         },
         {
+          title: 'About Us',
+          href: '/about-us',
+        },
+      ],
+    },
+    {
+      title: 'Policies',
+      items: [
+        {
+          title: 'Terms & Conditions',
+          href: '/terms-and-conditions',
+        },
+        {
           title: 'Returns',
           href: '/returns',
         },
         {
           title: 'Shipping & Payment',
           href: '/shipping-and-payment',
-        },
-      ],
-    },
-    {
-      title: 'My Account',
-      items: [
-        {
-          title: 'Orders Management',
-          href: '/dashboard/orders',
-        },
-        {
-          title: 'Manage Account',
-          href: '/dashboard/account',
-        },
-      ],
-    },
-    {
-      title: 'Company',
-      items: [
-        {
-          title: 'Blog',
-          href: '/blog',
-        },
-        {
-          title: 'About Us',
-          href: '/about-us',
-        },
-        {
-          title: 'Privacy Policy',
-          href: '/privacy-policy',
-        },
-        {
-          title: 'Terms and Conditions',
-          href: '/terms-and-conditions',
         },
       ],
     },
@@ -83,7 +62,7 @@ export function SiteFooter() {
           <section
             id='footer-links'
             aria-labelledby='footer-links-heading'
-            className='grid flex-1 grid-cols-1 gap-10 xxs:grid-cols-2 sm:grid-cols-4'
+            className='grid flex-1 grid-cols-1 gap-10 xxs:grid-cols-2 sm:grid-cols-3'
           >
             {footerLinks.map(item => (
               <div key={item.title} className='space-y-1.5'>

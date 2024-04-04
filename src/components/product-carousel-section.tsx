@@ -15,7 +15,7 @@ export function ProductCarouselSection({ products, ...props }: ProductCarouselSe
       <Carousel>
         <CarouselContent>
           {products.map(product => (
-            <CarouselItem key={product.slug} className='sm:basis-1/3'>
+            <CarouselItem key={product.slug} className='md:basis-1/3 lg:basis-1/4'>
               <ProductCard product={product} />
             </CarouselItem>
           ))}
