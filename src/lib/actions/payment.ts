@@ -81,6 +81,8 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>) {
           await db.insert(orderStatuses).values({
             status: 'PAID',
             orderId: order.id,
+            createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
           });
           const products = await db.query.orderProducts.findMany({
             where: eq(orderProducts.orderId, order.id),
@@ -99,7 +101,10 @@ export async function payment(rawInput: z.infer<typeof paymentSchema>) {
               });
               await db
                 .update(productStocks)
-                .set({ quantity: (productStock?.quantity ?? 0) - (product.quantity ?? 0) })
+                .set({
+                  quantity: (productStock?.quantity ?? 0) - (product.quantity ?? 0),
+                  updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                })
                 .where(eq(productStocks.id, product.productStockId));
             })
           );

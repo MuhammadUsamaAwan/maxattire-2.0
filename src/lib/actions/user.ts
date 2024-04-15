@@ -15,6 +15,9 @@ export async function updateUser(rawInput: z.infer<typeof updateUserSchema>) {
   if (!user) {
     throw new Error('Unauthorized');
   }
-  await db.update(users).set({ name }).where(eq(users.id, user.id));
+  await db
+    .update(users)
+    .set({ name, updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' ') })
+    .where(eq(users.id, user.id));
   await setAccessToken({ ...user, name });
 }

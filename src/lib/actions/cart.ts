@@ -46,7 +46,10 @@ export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
   if (alreadyInCart) {
     await db
       .update(carts)
-      .set({ quantity: (alreadyInCart.quantity ?? 0) + quantity })
+      .set({
+        quantity: (alreadyInCart.quantity ?? 0) + quantity,
+        updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      })
       .where(eq(carts.id, alreadyInCart.id));
   } else {
     await db.insert(carts).values({
@@ -54,6 +57,8 @@ export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
       productId,
       productStockId,
       quantity,
+      createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
     });
   }
   revalidateTag('cart-items');
@@ -67,7 +72,7 @@ export async function updateCartItem(rawInput: z.infer<typeof updateCartItemSche
   }
   await db
     .update(carts)
-    .set({ quantity })
+    .set({ quantity, updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' ') })
     .where(and(eq(carts.id, id), eq(carts.userId, user.id)));
   revalidateTag('cart-items');
 }

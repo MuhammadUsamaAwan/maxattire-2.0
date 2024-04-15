@@ -13,7 +13,7 @@ import { PageHeader } from '~/components/page-header';
 import { OrderConfirmForm } from './_components/order-confirm-form';
 
 export const metadata: Metadata = {
-  title: 'Confrim Order',
+  title: 'Confirm Order',
 };
 
 export default async function CheckoutPage() {

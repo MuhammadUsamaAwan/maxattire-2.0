@@ -21,6 +21,8 @@ export async function addAddress(rawInput: z.infer<typeof addAddressSchema>) {
     postalCode,
     phone,
     userId: user.id,
+    createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+    updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
   });
   revalidateTag('addresses');
   return newAddress.insertId;

@@ -451,6 +451,7 @@ export const orders = mysqlTable(
     id: bigint('id', { mode: 'number', unsigned: true }).autoincrement().notNull(),
     userId: int('user_id').notNull(),
     addressId: int('address_id').notNull(),
+    billingAddressId: int('billing_address_id'),
     paymentTypeId: int('payment_type_id'),
     vendorPaymentStatus: varchar('vendor_payment_status', { length: 191 }),
     paymentStatus: mysqlEnum('payment_status', ['paid', 'not-paid']).notNull(),
@@ -1063,6 +1064,14 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
   }),
   orderProducts: many(orderProducts),
   orderStatuses: many(orderStatuses),
+  shippingAddress: one(addresses, {
+    fields: [orders.billingAddressId],
+    references: [addresses.id],
+  }),
+  billingAddress: one(addresses, {
+    fields: [orders.billingAddressId],
+    references: [addresses.id],
+  }),
 }));
 
 export const postCategoriesRelations = relations(postCategories, ({ one }) => ({

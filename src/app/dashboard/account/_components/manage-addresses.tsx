@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import * as React from 'react';
 
 import { type Addresses } from '~/types';
 import { Button } from '~/components/ui/button';
@@ -16,7 +16,7 @@ type ManageAdressesProps = {
 };
 
 export default function ManageAdresses({ addresses }: ManageAdressesProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
     <>

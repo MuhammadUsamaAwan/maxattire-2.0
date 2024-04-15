@@ -59,6 +59,8 @@ export async function addReview(rawInput: z.infer<typeof addReviewSchema>) {
     rating,
     status: 'PENDING',
     review,
+    createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+    updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
   });
   revalidateTag('product-review');
   revalidateTag('order-product-review');

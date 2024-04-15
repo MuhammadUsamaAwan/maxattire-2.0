@@ -37,7 +37,7 @@ export default async function PaymentPage({ params: { orderCode } }: PaymentPage
     <div className='container pb-8 pt-6 md:py-8'>
       <PageHeader title='Payment' description='Enter your credit card details for payment' />
       <div className='grid gap-8 sm:grid-cols-2'>
-        <div>
+        <div className='space-y-3'>
           <Card>
             <CardHeader className='flex flex-row items-center space-x-4 py-4'>
               <CardTitle className='line-clamp-1 flex-1'>Your Order</CardTitle>
@@ -57,6 +57,24 @@ export default async function PaymentPage({ params: { orderCode } }: PaymentPage
                 )}
               </span>
             </CardFooter>
+          </Card>
+          <Card>
+            <CardContent className='space-y-3 p-4'>
+              <div>
+                <h3 className='text-sm font-medium'>Shipping Address</h3>
+                <p className='text-sm text-muted-foreground'>
+                  {order.shippingAddress?.address} {order.shippingAddress?.city} {order.shippingAddress?.state}{' '}
+                  {order.shippingAddress?.postalCode} {order.shippingAddress?.phone}
+                </p>
+              </div>
+              <div>
+                <h3 className='text-sm font-medium'>Billing Address</h3>
+                <p className='text-sm text-muted-foreground'>
+                  {order.billingAddress?.address} {order.billingAddress?.city} {order.billingAddress?.state}{' '}
+                  {order.billingAddress?.postalCode} {order.billingAddress?.phone}
+                </p>
+              </div>
+            </CardContent>
           </Card>
         </div>
         <PaymentForm orderCode={orderCode} />

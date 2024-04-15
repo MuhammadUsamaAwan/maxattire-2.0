@@ -12,13 +12,13 @@ import { sendOrderEmail } from '~/lib/email';
 import { createOrderSchema } from '~/lib/validations/order';
 
 export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
-  const { addressId } = createOrderSchema.parse(rawInput);
+  const { shippingAddressId, billingAddressId } = createOrderSchema.parse(rawInput);
   const user = await getUser();
   if (!user) {
     throw new Error('Unauthorized');
   }
-  const address = await db.query.addresses.findFirst({
-    where: eq(addresses.id, addressId),
+  const shippingAddress = await db.query.addresses.findFirst({
+    where: eq(addresses.id, shippingAddressId),
     columns: {
       state: true,
       city: true,
@@ -27,8 +27,21 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
       postalCode: true,
     },
   });
-  if (!address) {
-    throw new Error('Address not found');
+  if (!shippingAddress) {
+    throw new Error('Shipping Address not found');
+  }
+  const billingAddress = await db.query.addresses.findFirst({
+    where: eq(addresses.id, billingAddressId),
+    columns: {
+      state: true,
+      city: true,
+      address: true,
+      phone: true,
+      postalCode: true,
+    },
+  });
+  if (!billingAddress) {
+    throw new Error('Billing Address not found');
   }
   const cart = await db.query.carts.findMany({
     where: eq(carts.userId, user.id),
@@ -75,11 +88,14 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
   const code = `${siteConfig.title.slice(0, 4)}-${Math.floor(100000 + Math.random() * 900000)}-${Date.now()}`;
   const [order] = await db.insert(orders).values({
     userId: user.id,
-    addressId,
+    addressId: shippingAddressId,
+    billingAddressId,
     code,
     grandTotal,
     tax: 0,
     paymentStatus: 'not-paid',
+    createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+    updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
   });
   const orderId = order.insertId;
   const orderProductPromises = cart.map(cart => {
@@ -93,11 +109,15 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
       price: cart.productStock?.price,
       tax: cart.tax,
       discount: cart.discount,
+      createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
     });
   });
   const orderStatusPromise = db.insert(orderStatuses).values({
     orderId,
     status: 'AWAITING_PAYMENT',
+    createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+    updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
   });
   const sendOrderEmailPromise = sendOrderEmail({
     to: user.email,
@@ -120,7 +140,8 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
         },
       },
     })),
-    address,
+    shippingAddress,
+    billingAddress,
   });
   const deleteCartPromise = db.delete(carts).where(eq(carts.userId, user.id));
 

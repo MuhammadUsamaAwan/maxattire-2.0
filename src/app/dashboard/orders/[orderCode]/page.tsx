@@ -76,6 +76,24 @@ export default async function OrderDetailPage({ params: { orderCode } }: OrderDe
           </span>
         </CardFooter>
       </Card>
+      <Card>
+        <CardContent className='space-y-3 p-4'>
+          <div>
+            <h3 className='text-sm font-medium'>Shipping Address</h3>
+            <p className='text-sm text-muted-foreground'>
+              {order.shippingAddress?.address} {order.shippingAddress?.city} {order.shippingAddress?.state}{' '}
+              {order.shippingAddress?.postalCode} {order.shippingAddress?.phone}
+            </p>
+          </div>
+          <div>
+            <h3 className='text-sm font-medium'>Billing Address</h3>
+            <p className='text-sm text-muted-foreground'>
+              {order.billingAddress?.address} {order.billingAddress?.city} {order.billingAddress?.state}{' '}
+              {order.billingAddress?.postalCode} {order.billingAddress?.phone}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

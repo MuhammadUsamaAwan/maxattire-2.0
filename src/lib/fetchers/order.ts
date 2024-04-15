@@ -93,6 +93,24 @@ export const getOrder = unstable_cache(
             },
           },
         },
+        shippingAddress: {
+          columns: {
+            phone: true,
+            address: true,
+            state: true,
+            city: true,
+            postalCode: true,
+          },
+        },
+        billingAddress: {
+          columns: {
+            phone: true,
+            address: true,
+            state: true,
+            city: true,
+            postalCode: true,
+          },
+        },
       },
       orderBy: desc(orders.createdAt),
     });

@@ -52,6 +52,8 @@ export async function signUpWithCredentials(rawInput: z.infer<typeof signUpSchem
       email,
       password: hashed,
       status: 'active',
+      createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
     });
     const user = await db.query.users.findFirst({
       where: eq(users.email, email),

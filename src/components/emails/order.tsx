@@ -37,7 +37,14 @@ export type OrderEmailProps = {
       };
     };
   }[];
-  address: {
+  shippingAddress: {
+    state: string | null;
+    city: string | null;
+    address: string | null;
+    phone: string | null;
+    postalCode: string | null;
+  };
+  billingAddress: {
     state: string | null;
     city: string | null;
     address: string | null;
@@ -48,7 +55,7 @@ export type OrderEmailProps = {
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? '';
 
-export const OrderEmail = ({ code, grandTotal, orderProducts, address }: OrderEmailProps) => {
+export const OrderEmail = ({ code, grandTotal, orderProducts, shippingAddress, billingAddress }: OrderEmailProps) => {
   return (
     <Html>
       <Head />
@@ -113,7 +120,15 @@ export const OrderEmail = ({ code, grandTotal, orderProducts, address }: OrderEm
                 <strong>Shipping Address:</strong>
               </Text>
               <Text className='mt-[4px] text-[#666666]'>
-                {address.address}, {address.city}, {address.state}, {address.postalCode}
+                {shippingAddress.address}, {shippingAddress.city}, {shippingAddress.state}, {shippingAddress.postalCode}
+              </Text>
+            </Section>
+            <Section>
+              <Text className='mb-[4px]'>
+                <strong>Billing Address:</strong>
+              </Text>
+              <Text className='mt-[4px] text-[#666666]'>
+                {billingAddress.address}, {billingAddress.city}, {billingAddress.state}, {billingAddress.postalCode}
               </Text>
             </Section>
             <Hr />
@@ -184,7 +199,15 @@ OrderEmail.PreviewProps = {
       },
     },
   ],
-  address: {
+  shippingAddress: {
+    id: 1,
+    state: 'California',
+    city: 'Los Angeles',
+    address: '123 Main St',
+    phone: '123-456-7890',
+    postalCode: '90001',
+  },
+  billingAddress: {
     id: 1,
     state: 'California',
     city: 'Los Angeles',

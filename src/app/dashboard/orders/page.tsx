@@ -54,7 +54,9 @@ export default async function OrdersPage() {
             {orders.map(order => (
               <TableRow key={order.id}>
                 <TableCell>{order.code}</TableCell>
-                <TableCell>{format(order.createdAt ? new Date(order.createdAt) : new Date(), 'dd MMM yy')}</TableCell>
+                <TableCell>
+                  {format(order.createdAt ? new Date(order.createdAt) : new Date(), 'dd MMM yy hh:mm')}
+                </TableCell>
                 <TableCell>
                   <OrderStatusBadge status={order.orderStatuses[order.orderStatuses.length - 1]?.status} />
                 </TableCell>
