@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, ne } from 'drizzle-orm';
 
 import { db } from '~/db';
 import { products, productSpecs, productSpecTypes } from '~/db/schema';
@@ -12,7 +12,7 @@ export const getSizeChart = unstable_cache(
       columns: {
         id: true,
       },
-      where: and(eq(products.slug, productSlug), isNull(products.deletedAt), eq(products.status, 'active')),
+      where: and(eq(products.slug, productSlug), isNull(products.deletedAt), ne(products.status, 'not-active')),
     });
     if (!product) return [];
     return db

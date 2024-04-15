@@ -24,10 +24,10 @@ export function CartItems({ items, isEditable = true, variant = 'default', class
               <div className='flex items-center space-x-4'>
                 {variant === 'default' ? (
                   <div className='relative aspect-square size-16 min-w-fit overflow-hidden rounded'>
-                    {item?.product?.thumbnail ? (
+                    {item?.productStock?.productStockImages[0]?.fileName ? (
                       <Image
-                        src={item.product.thumbnail}
-                        alt={item.product.title ?? ''}
+                        src={item?.productStock?.productStockImages[0]?.fileName}
+                        alt={item?.product?.title ?? ''}
                         sizes='64px'
                         fill
                         className='absolute object-cover'

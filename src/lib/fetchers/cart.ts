@@ -33,13 +33,17 @@ export const getCartItems = unstable_cache(
                 code: true,
               },
             },
+            productStockImages: {
+              columns: {
+                fileName: true,
+              },
+            },
           },
         },
         product: {
           columns: {
             title: true,
             slug: true,
-            thumbnail: true,
           },
         },
       },

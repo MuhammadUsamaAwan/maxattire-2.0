@@ -13,6 +13,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip
 import { PlaceholderImage } from '~/components/placeholder-image';
 import { Rating } from '~/components/rating';
 
+import { Badge } from './ui/badge';
+
 type ProductCard = {
   product: Products[number];
 };
@@ -30,7 +32,7 @@ export function ProductCard({ product }: ProductCard) {
   }, [product]);
 
   return (
-    <Card className='overflow-hidden'>
+    <Card className='relative overflow-hidden'>
       <CardHeader className='border-b p-0'>
         <Link aria-label={product.title} href={`/products/${product.slug}`}>
           <AspectRatio ratio={4 / 3}>
@@ -89,6 +91,11 @@ export function ProductCard({ product }: ProductCard) {
           </div>
         </div>
       </CardContent>
+      {product.status === 'out-of-stock' && (
+        <Badge className='absolute left-2 top-2' variant='destructive'>
+          Out of Stock
+        </Badge>
+      )}
     </Card>
   );
 }

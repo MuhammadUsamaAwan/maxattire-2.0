@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
-import { and, countDistinct, eq, gt, inArray, isNotNull, isNull, lt } from 'drizzle-orm';
+import { and, countDistinct, eq, gt, inArray, isNotNull, isNull, lt, ne } from 'drizzle-orm';
 
 import type { CategoriesFilters } from '~/types';
 import { db } from '~/db';
@@ -49,7 +49,7 @@ export const getFilteredColors = unstable_cache(
           filter?.minPrice ? gt(products.sellPrice, filter.minPrice) : undefined,
           category && eq(productCategories.categoryId, category.id),
           brand && eq(products.storeId, brand.id),
-          eq(products.status, 'active'),
+          ne(products.status, 'not-active'),
           isNull(products.deletedAt)
         )
       )
@@ -84,7 +84,7 @@ export const getFilteredColors = unstable_cache(
 export const getProductColors = unstable_cache(
   async (productSlug: string) => {
     const product = await db.query.products.findFirst({
-      where: and(eq(products.slug, productSlug), isNull(products.deletedAt), eq(products.status, 'active')),
+      where: and(eq(products.slug, productSlug), isNull(products.deletedAt), ne(products.status, 'not-active')),
       columns: {
         id: true,
       },

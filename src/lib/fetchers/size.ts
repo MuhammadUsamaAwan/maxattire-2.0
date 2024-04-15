@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
-import { and, countDistinct, eq, gt, inArray, isNull, lt } from 'drizzle-orm';
+import { and, countDistinct, eq, gt, inArray, isNull, lt, ne } from 'drizzle-orm';
 
 import type { CategoriesFilters } from '~/types';
 import { db } from '~/db';
@@ -48,7 +48,7 @@ export const getFilteredSizes = unstable_cache(
           filter?.minPrice ? gt(products.sellPrice, filter.minPrice) : undefined,
           category && eq(productCategories.categoryId, category.id),
           brand && eq(products.storeId, brand.id),
-          eq(products.status, 'active'),
+          ne(products.status, 'not-active'),
           isNull(products.deletedAt)
         )
       )

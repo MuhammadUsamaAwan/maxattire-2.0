@@ -20,9 +20,10 @@ type AddToCartProps = {
   stock: ProductStocks;
   color: string | undefined;
   isAuthed: boolean;
+  isOutOfStock: boolean;
 };
 
-export function AddToCart({ productId, stock, colors, color, isAuthed }: AddToCartProps) {
+export function AddToCart({ productId, stock, colors, color, isAuthed, isOutOfStock }: AddToCartProps) {
   const router = useRouter();
 
   const [cartData, setCartData] = React.useState<
@@ -142,7 +143,7 @@ export function AddToCart({ productId, stock, colors, color, isAuthed }: AddToCa
       )}
       <LoadingButton
         size='lg'
-        disabled={!cartData.length || cartData.some(c => c.quantity === 0)}
+        disabled={!cartData.length || cartData.some(c => c.quantity === 0) || isOutOfStock}
         onClick={addProductToCart}
         isLoading={isPending}
       >

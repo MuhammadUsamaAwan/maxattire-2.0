@@ -17,6 +17,7 @@ export const getNewProducts = unstable_cache(
           thumbnail: true,
           sellPrice: true,
           discount: true,
+          status: true,
         },
         with: {
           productStocks: {
@@ -39,7 +40,7 @@ export const getNewProducts = unstable_cache(
           },
         },
         limit: 8,
-        where: and(eq(products.isNewarrival, 1), isNull(products.deletedAt), eq(products.status, 'active')),
+        where: and(eq(products.isNewarrival, 1), isNull(products.deletedAt), ne(products.status, 'not-active')),
       });
     }
   },
@@ -59,6 +60,7 @@ export const getTopProducts = unstable_cache(
           thumbnail: true,
           sellPrice: true,
           discount: true,
+          status: true,
         },
         with: {
           productStocks: {
@@ -81,7 +83,7 @@ export const getTopProducts = unstable_cache(
           },
         },
         limit: 8,
-        where: and(eq(products.isTopselling, 1), isNull(products.deletedAt), eq(products.status, 'active')),
+        where: and(eq(products.isTopselling, 1), isNull(products.deletedAt), ne(products.status, 'not-active')),
       });
     }
   },
@@ -101,6 +103,7 @@ export const getFeaturedProducts = unstable_cache(
           thumbnail: true,
           sellPrice: true,
           discount: true,
+          status: true,
         },
         with: {
           productStocks: {
@@ -123,7 +126,7 @@ export const getFeaturedProducts = unstable_cache(
           },
         },
         limit: 8,
-        where: and(eq(products.isFeatured, 1), isNull(products.deletedAt), eq(products.status, 'active')),
+        where: and(eq(products.isFeatured, 1), isNull(products.deletedAt), ne(products.status, 'not-active')),
       });
     }
   },
@@ -143,6 +146,7 @@ export const getWholeSaleProducts = unstable_cache(
           thumbnail: true,
           sellPrice: true,
           discount: true,
+          status: true,
         },
         with: {
           productStocks: {
@@ -165,7 +169,7 @@ export const getWholeSaleProducts = unstable_cache(
           },
         },
         limit: 8,
-        where: and(eq(products.isWholesale, 1), isNull(products.deletedAt), eq(products.status, 'active')),
+        where: and(eq(products.isWholesale, 1), isNull(products.deletedAt), ne(products.status, 'not-active')),
       });
     }
   },
@@ -233,7 +237,7 @@ export const getFilteredProducts = unstable_cache(
           category && eq(productCategories.categoryId, category.id),
           sizesIds && inArray(productStocks.sizeId, sizesIds),
           colorsIds && inArray(productStocks.colorId, colorsIds),
-          eq(products.status, 'active'),
+          ne(products.status, 'not-active'),
           isNull(products.deletedAt),
           brand && eq(products.storeId, brand.id),
           filter?.q ? like(products.title, `%${filter.q}%`) : undefined
@@ -251,6 +255,7 @@ export const getFilteredProducts = unstable_cache(
         thumbnail: true,
         sellPrice: true,
         discount: true,
+        status: true,
       },
       with: {
         productStocks: {
@@ -337,6 +342,7 @@ export const getRelatedProducts = unstable_cache(
           thumbnail: true,
           sellPrice: true,
           discount: true,
+          status: true,
         },
         with: {
           productStocks: {
@@ -359,7 +365,7 @@ export const getRelatedProducts = unstable_cache(
           },
         },
         limit: 8,
-        where: and(isNull(products.deletedAt), eq(products.status, 'active')),
+        where: and(isNull(products.deletedAt), ne(products.status, 'not-active')),
       });
     }
     return db.query.products.findMany({
@@ -369,6 +375,7 @@ export const getRelatedProducts = unstable_cache(
         thumbnail: true,
         sellPrice: true,
         discount: true,
+        status: true,
       },
       with: {
         productStocks: {
@@ -391,7 +398,7 @@ export const getRelatedProducts = unstable_cache(
         },
       },
       limit: 8,
-      where: and(isNull(products.deletedAt), eq(products.status, 'active'), inArray(products.id, productIds)),
+      where: and(isNull(products.deletedAt), ne(products.status, 'not-active'), inArray(products.id, productIds)),
     });
   },
   ['related-products'],
@@ -401,7 +408,7 @@ export const getRelatedProducts = unstable_cache(
 export const getProduct = unstable_cache(
   async (slug: string) => {
     return db.query.products.findFirst({
-      where: and(eq(products.slug, slug), isNull(products.deletedAt), eq(products.status, 'active')),
+      where: and(eq(products.slug, slug), isNull(products.deletedAt), ne(products.status, 'not-active')),
       columns: {
         id: true,
         title: true,
@@ -411,6 +418,7 @@ export const getProduct = unstable_cache(
         discount: true,
         tax: true,
         description: true,
+        status: true,
       },
       with: {
         productStocks: {
@@ -448,7 +456,7 @@ export const getProduct = unstable_cache(
 export const getProductSeo = unstable_cache(
   async (slug: string) => {
     return db.query.products.findFirst({
-      where: and(eq(products.slug, slug), isNull(products.deletedAt), eq(products.status, 'active')),
+      where: and(eq(products.slug, slug), isNull(products.deletedAt), ne(products.status, 'not-active')),
       columns: {
         metaTitle: true,
         metaDescription: true,

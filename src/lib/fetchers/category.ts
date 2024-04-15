@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
-import { and, count, eq, gt, inArray, isNull, lt } from 'drizzle-orm';
+import { and, count, eq, gt, inArray, isNull, lt, ne } from 'drizzle-orm';
 import { arrayToTree } from 'performant-array-to-tree';
 
 import type { CategoriesFilters, FilteredCategory } from '~/types';
@@ -82,7 +82,7 @@ export const getFilteredCategories = unstable_cache(
           sizesIds && inArray(productStocks.sizeId, sizesIds),
           colorsIds && inArray(productStocks.colorId, colorsIds),
           brand && eq(products.storeId, brand.id),
-          eq(products.status, 'active'),
+          ne(products.status, 'not-active'),
           isNull(products.deletedAt)
         )
       )

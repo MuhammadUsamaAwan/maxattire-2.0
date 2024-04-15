@@ -2,7 +2,7 @@ import 'server-only';
 
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, ne } from 'drizzle-orm';
 
 import { db } from '~/db';
 import { products, reviews, users } from '~/db/schema';
@@ -15,7 +15,7 @@ export const getProductReviews = unstable_cache(
       columns: {
         id: true,
       },
-      where: and(eq(products.slug, slug), isNull(products.deletedAt), eq(products.status, 'active')),
+      where: and(eq(products.slug, slug), isNull(products.deletedAt), ne(products.status, 'not-active')),
     });
     if (!product) return [];
     return db

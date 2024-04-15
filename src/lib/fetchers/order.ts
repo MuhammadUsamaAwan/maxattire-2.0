@@ -81,6 +81,11 @@ export const getOrder = unstable_cache(
                     title: true,
                   },
                 },
+                productStockImages: {
+                  columns: {
+                    fileName: true,
+                  },
+                },
               },
             },
             product: {
@@ -88,7 +93,6 @@ export const getOrder = unstable_cache(
                 id: true,
                 title: true,
                 slug: true,
-                thumbnail: true,
               },
             },
           },

@@ -131,9 +131,17 @@ export default async function ProductPage({ params: { productSlug }, searchParam
                 formatPrice(product?.sellPrice ?? 0)
               )}
             </div>
+            {product.status === 'out-of-stock' && <div className='font-semibold text-destructive'>Out of Stock</div>}
           </div>
           <Separator className='my-1.5' />
-          <AddToCart productId={product.id} colors={colors} stock={stock} color={color} isAuthed={Boolean(user)} />
+          <AddToCart
+            productId={product.id}
+            colors={colors}
+            stock={stock}
+            color={color}
+            isAuthed={Boolean(user)}
+            isOutOfStock={product.status === 'out-of-stock'}
+          />
           <Separator className='mt-5' />
         </div>
       </div>

@@ -21,9 +21,9 @@ export function OrderItems({ order, reviewOrder, className, ...props }: Props) {
             <div className={'flex items-start justify-between gap-4'}>
               <div className='flex items-center space-x-4'>
                 <div className='relative aspect-square size-16 min-w-fit overflow-hidden rounded'>
-                  {item.product?.thumbnail ? (
+                  {item.productStock.productStockImages[0]?.fileName ? (
                     <Image
-                      src={item.product?.thumbnail}
+                      src={item.productStock.productStockImages[0]?.fileName}
                       alt={item?.product?.title ?? ''}
                       sizes='64px'
                       fill
