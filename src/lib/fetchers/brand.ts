@@ -21,3 +21,17 @@ export const getBrands = unstable_cache(
     revalidate: 60,
   }
 );
+
+export const getBrandTitleDescription = unstable_cache(
+  async (slug: string) => {
+    return db.query.stores.findFirst({
+      where: eq(stores.slug, slug),
+      columns: {
+        name: true,
+        metaDescription: true,
+      },
+    });
+  },
+  ['brandTitleDescription'],
+  { revalidate: 60 }
+);

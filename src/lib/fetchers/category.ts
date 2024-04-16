@@ -115,3 +115,17 @@ export const getFilteredCategories = unstable_cache(
     revalidate: 60,
   }
 );
+
+export const getCategoryTitleDescription = unstable_cache(
+  async (slug: string) => {
+    return db.query.categories.findFirst({
+      where: eq(categories.slug, slug),
+      columns: {
+        title: true,
+        description: true,
+      },
+    });
+  },
+  ['categoryTitleDescription'],
+  { revalidate: 60 }
+);

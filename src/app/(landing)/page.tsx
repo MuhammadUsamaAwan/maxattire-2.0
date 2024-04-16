@@ -4,6 +4,7 @@ import { ProductCarouselSectionSkeleton } from '~/components/product-carousel-se
 
 import { About } from './_components/about';
 import { Brands } from './_components/brands';
+import { Content } from './_components/content';
 import { FeaturedProducts } from './_components/featured-products';
 import { Features } from './_components/features';
 import { GridSection } from './_components/grid-section';
@@ -46,6 +47,7 @@ export default function HomePage() {
         <TopProducts />
       </Suspense>
       <GridSection />
+      <Content />
     </>
   );
 }

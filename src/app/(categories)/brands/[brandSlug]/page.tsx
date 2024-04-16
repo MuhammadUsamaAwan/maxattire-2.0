@@ -4,8 +4,10 @@ import { type Metadata } from 'next';
 import type { CategoriesSearchParams } from '~/types';
 import { unslugify } from '~/lib/utils';
 
+import { BrandHeader } from '../../_components/brand-header';
 import { CategoryFilters } from '../../_components/category-filters';
 import { CategoryFiltersSkeleton } from '../../_components/category-filters-skeleton';
+import { CategoryHeaderSkeleton } from '../../_components/category-header-skeleton';
 import { CategoryProducts } from '../../_components/category-products';
 import { CategoryProductsSkeleton } from '../../_components/category-products-skeleton';
 
@@ -26,14 +28,9 @@ export function generateMetadata({ params: { brandSlug } }: BrandPageProps): Met
 export default function BrandPage({ searchParams, params: { brandSlug } }: BrandPageProps) {
   return (
     <div className='container pb-8 pt-6 md:py-8'>
-      <div className='mb-6 space-y-1'>
-        <h1 className='text-center text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]'>
-          Browse {unslugify(brandSlug)}&apos;s Collection
-        </h1>
-        <p className='text-center text-base text-muted-foreground sm:text-lg'>
-          Highest quality {unslugify(brandSlug).toLowerCase()}&apos; collection with free & fast shipping
-        </p>
-      </div>
+      <Suspense fallback={<CategoryHeaderSkeleton />}>
+        <BrandHeader slug={brandSlug} />
+      </Suspense>
       <div className='mb-8 space-y-1'>
         <div className='flex flex-col gap-6 lg:flex-row lg:gap-10'>
           <div className='w-full lg:w-80'>
