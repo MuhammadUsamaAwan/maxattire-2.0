@@ -95,6 +95,11 @@ export const getOrder = unstable_cache(
                 slug: true,
               },
             },
+            customizationType: {
+              columns: {
+                title: true,
+              },
+            },
           },
         },
         shippingAddress: {

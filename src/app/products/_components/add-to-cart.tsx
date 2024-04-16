@@ -4,11 +4,13 @@ import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import type { ProductColors, ProductStocks } from '~/types';
+import type { CustomizationTypes, ProductColors, ProductStocks } from '~/types';
 import { addToCart } from '~/lib/actions/cart';
 import { catchError, formatPrice } from '~/lib/utils';
 import { Checkbox } from '~/components/ui/checkbox';
 import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
 import { Icons } from '~/components/icons';
@@ -21,9 +23,18 @@ type AddToCartProps = {
   color: string | undefined;
   isAuthed: boolean;
   isOutOfStock: boolean;
+  customizationTypes: CustomizationTypes;
 };
 
-export function AddToCart({ productId, stock, colors, color, isAuthed, isOutOfStock }: AddToCartProps) {
+export function AddToCart({
+  productId,
+  stock,
+  colors,
+  color,
+  isAuthed,
+  isOutOfStock,
+  customizationTypes,
+}: AddToCartProps) {
   const router = useRouter();
 
   const [cartData, setCartData] = React.useState<
@@ -32,6 +43,7 @@ export function AddToCart({ productId, stock, colors, color, isAuthed, isOutOfSt
       quantity: number;
     }[]
   >([]);
+  const [customizationType, setCustomizationType] = React.useState('none');
   const [isPending, startTransition] = React.useTransition();
 
   React.useEffect(() => {
@@ -57,6 +69,7 @@ export function AddToCart({ productId, stock, colors, color, isAuthed, isOutOfSt
                 productId,
                 productStockId: item.stockId,
                 quantity: item.quantity,
+                customizationTypeId: customizationType === 'none' ? null : Number(customizationType),
               });
             })
           );
@@ -141,6 +154,24 @@ export function AddToCart({ productId, stock, colors, color, isAuthed, isOutOfSt
           </TableBody>
         </Table>
       )}
+      <div className='space-y-1.5'>
+        <Label className='text-base font-semibold'>Decoration Option:</Label>
+        <Select value={customizationType} onValueChange={setCustomizationType}>
+          <SelectTrigger className='w-56'>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='none'>None</SelectItem>
+            <SelectGroup>
+              {customizationTypes.map(customizationType => (
+                <SelectItem key={customizationType.id} value={String(customizationType.id)}>
+                  {customizationType.title}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <LoadingButton
         size='lg'
         disabled={!cartData.length || cartData.some(c => c.quantity === 0) || isOutOfStock}

@@ -10,7 +10,7 @@ import { getUser } from '~/lib/auth';
 import { addToCartSchema, removeCartItemSchema, updateCartItemSchema } from '~/lib/validations/cart';
 
 export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
-  const { productId, productStockId, quantity } = addToCartSchema.parse(rawInput);
+  const { productId, productStockId, quantity, customizationTypeId } = addToCartSchema.parse(rawInput);
   const user = await getUser();
   if (!user) {
     throw new Error('Unauthorized');
@@ -41,9 +41,13 @@ export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
     columns: {
       id: true,
       quantity: true,
+      customizationTypeId: true,
     },
   });
   if (alreadyInCart) {
+    if (alreadyInCart?.customizationTypeId !== customizationTypeId) {
+      throw new Error('Decoration type does not match');
+    }
     await db
       .update(carts)
       .set({
@@ -57,6 +61,7 @@ export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
       productId,
       productStockId,
       quantity,
+      customizationTypeId,
       createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
       updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
     });

@@ -49,6 +49,7 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
       quantity: true,
       tax: true,
       discount: true,
+      customizationTypeId: true,
     },
     with: {
       product: {
@@ -109,6 +110,7 @@ export async function createOrder(rawInput: z.infer<typeof createOrderSchema>) {
       price: cart.productStock?.price,
       tax: cart.tax,
       discount: cart.discount,
+      customizationTypeId: cart.customizationTypeId,
       createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
       updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
     });

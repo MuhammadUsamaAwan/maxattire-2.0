@@ -4,6 +4,7 @@ export const addToCartSchema = z.object({
   productId: z.number().min(1),
   productStockId: z.number().min(1),
   quantity: z.number().min(1),
+  customizationTypeId: z.number().min(1).nullable(),
 });
 
 export const updateCartItemSchema = z.object({

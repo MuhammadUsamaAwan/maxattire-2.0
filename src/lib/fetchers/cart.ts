@@ -46,6 +46,11 @@ export const getCartItems = unstable_cache(
             slug: true,
           },
         },
+        customizationType: {
+          columns: {
+            title: true,
+          },
+        },
       },
     });
   },

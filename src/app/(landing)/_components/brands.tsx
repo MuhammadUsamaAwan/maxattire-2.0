@@ -6,7 +6,7 @@ import { buttonVariants } from '~/components/ui/button';
 import { ContentSection } from '~/components/content-section';
 
 export async function Brands() {
-  const brands = await getBrands();
+  const brands = (await getBrands()).slice(0, 8);
 
   return (
     <ContentSection title='Our Premium Brands' description='Explore our premium brands from around the world'>

@@ -111,6 +111,7 @@ export const carts = mysqlTable(
     tempUserId: varchar('temp_user_id', { length: 191 }),
     productId: int('product_id'),
     productStockId: int('product_stock_id'),
+    customizationTypeId: int('customization_type_id'),
     sizeId: int('size_id'),
     colorId: int('color_id'),
     quantity: int('quantity'),
@@ -233,6 +234,23 @@ export const coupons = mysqlTable(
   table => {
     return {
       couponsId: primaryKey({ columns: [table.id], name: 'coupons_id' }),
+    };
+  }
+);
+
+export const customizationTypes = mysqlTable(
+  'customization_types',
+  {
+    id: bigint('id', { mode: 'number', unsigned: true }).autoincrement().notNull(),
+    title: varchar('title', { length: 191 }),
+    slug: varchar('slug', { length: 191 }),
+    status: mysqlEnum('status', ['active', 'not-active']).notNull(),
+    createdAt: timestamp('created_at', { mode: 'string' }),
+    updatedAt: timestamp('updated_at', { mode: 'string' }),
+  },
+  table => {
+    return {
+      customizationTypesId: primaryKey({ columns: [table.id], name: 'customization_types_id' }),
     };
   }
 );
@@ -404,6 +422,7 @@ export const orderProducts = mysqlTable(
     orderId: int('order_id').notNull(),
     productId: int('product_id'),
     productStockId: int('product_stock_id').notNull(),
+    customizationTypeId: int('customization_type_id'),
     sizeId: int('size_id'),
     colorId: int('color_id'),
     quantity: int('quantity'),
@@ -992,6 +1011,10 @@ export const cartsRelations = relations(carts, ({ one }) => ({
     fields: [carts.productStockId],
     references: [productStocks.id],
   }),
+  customizationType: one(customizationTypes, {
+    fields: [carts.customizationTypeId],
+    references: [customizationTypes.id],
+  }),
 }));
 
 export const categoriesRelations = relations(categories, ({ one, many }) => ({
@@ -1039,6 +1062,10 @@ export const orderProductsRelations = relations(orderProducts, ({ one }) => ({
   productStock: one(productStocks, {
     fields: [orderProducts.productStockId],
     references: [productStocks.id],
+  }),
+  customizationType: one(customizationTypes, {
+    fields: [orderProducts.customizationTypeId],
+    references: [customizationTypes.id],
   }),
 }));
 

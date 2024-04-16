@@ -46,6 +46,9 @@ export function OrderItems({ order, reviewOrder, className, ...props }: Props) {
                   <span className='line-clamp-1 text-xs text-muted-foreground'>
                     {item.productStock.color?.title} - {item.productStock.size?.title}
                   </span>
+                  <span className='line-clamp-1 text-xs text-muted-foreground'>
+                    <span className='font-medium'>Decoration Type:</span> {item.customizationType?.title ?? 'None'}
+                  </span>
                   {reviewOrder && (
                     <Link
                       href={`/dashboard/orders/${order.code}/${item.id}/${item.product?.id}`}

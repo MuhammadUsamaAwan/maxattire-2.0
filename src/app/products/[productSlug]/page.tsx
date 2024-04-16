@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { env } from '~/env';
 import { getUser } from '~/lib/auth';
 import { getProductColors } from '~/lib/fetchers/color';
+import { getCustomizationTypes } from '~/lib/fetchers/customizationType';
 import { getProduct, getProductSeo } from '~/lib/fetchers/product';
 import { getProductStocks } from '~/lib/fetchers/product-stock';
 import { absoluteUrl, formatPrice } from '~/lib/utils';
@@ -71,6 +72,7 @@ export default async function ProductPage({ params: { productSlug }, searchParam
   const colors = await getProductColors(productSlug);
   const user = await getUser();
   const stock = await getProductStocks(productSlug, color);
+  const customizationTypes = await getCustomizationTypes();
 
   const rating = !product
     ? 0
@@ -139,6 +141,7 @@ export default async function ProductPage({ params: { productSlug }, searchParam
             colors={colors}
             stock={stock}
             color={color}
+            customizationTypes={customizationTypes}
             isAuthed={Boolean(user)}
             isOutOfStock={product.status === 'out-of-stock'}
           />
