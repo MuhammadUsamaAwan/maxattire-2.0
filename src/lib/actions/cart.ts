@@ -44,10 +44,7 @@ export async function addToCart(rawInput: z.infer<typeof addToCartSchema>) {
       customizationTypeId: true,
     },
   });
-  if (alreadyInCart) {
-    if (alreadyInCart?.customizationTypeId !== customizationTypeId) {
-      throw new Error('Decoration type does not match');
-    }
+  if (alreadyInCart && alreadyInCart.customizationTypeId === customizationTypeId) {
     await db
       .update(carts)
       .set({
